@@ -6,15 +6,19 @@ export default function Player() {
   const musicList = usePlayerStore((state) => state.musicList);
   const [seek, setSeek] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const howlerRef = useRef(null);
-  const { currentTrack, isPlaying, volume, togglePlay, setVolume } =
+  const { currentTrack, isPlaying, volume, togglePlay, setVolume, trackInfo } =
     usePlayerStore();
 
-  if (!currentTrack) return null;
+  if (!currentTrack || !trackInfo) return null;
 
   useEffect(() => {
     let timer;
     if (isPlaying) {
+      // Si está reproduciendo, asumimos que ya no está cargando
+      setIsLoading(false);
       timer = setInterval(() => {
         if (howlerRef.current) {
           setSeek(howlerRef.current.seek());
@@ -24,19 +28,34 @@ export default function Player() {
     return () => clearInterval(timer);
   }, [isPlaying]);
 
+  // Reset loading state when track changes
+  useEffect(() => {
+    setIsLoading(false);
+    setError(null);
+  }, [currentTrack]);
+
   const formatTime = (secs) => {
+    if (!secs || isNaN(secs)) return "0:00";
     const min = Math.floor(secs / 60) || 0;
     const sec = Math.floor(secs % 60) || 0;
     return `${min}:${sec < 10 ? "0" : ""}${sec}`;
   };
 
   const handleLoad = () => {
+    setIsLoading(false);
+    setError(null);
     if (howlerRef.current) {
       setDuration(howlerRef.current.duration());
     }
   };
 
+  const handleLoadError = () => {
+    setIsLoading(false);
+    setError("Error loading audio file");
+  };
+
   const handleSeek = (e) => {
+    if (!duration) return;
     const rect = e.target.getBoundingClientRect();
     const percent = (e.clientX - rect.left) / rect.width;
     const newSeek = percent * duration;
@@ -48,6 +67,17 @@ export default function Player() {
 
   const handleVolume = (e) => {
     setVolume(Number(e.target.value));
+  };
+
+  const handlePlay = () => {
+    if (!isLoading) {
+      setError(null);
+      console.log("Current isPlaying state:", isPlaying);
+      // Pequeño delay para asegurar que ReactHowler responda correctamente
+      setTimeout(() => {
+        togglePlay();
+      }, 50);
+    }
   };
 
   return (
@@ -67,14 +97,20 @@ export default function Player() {
         style={{ minWidth: 0 }}
       >
         <img
-          src="https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228"
+          src={trackInfo.cover}
           alt="Album Art"
           className="rounded me-2 me-md-3"
           style={{ width: "40px", height: "40px", objectFit: "cover" }}
+          onError={(e) => {
+            e.target.src =
+              "https://via.placeholder.com/40/6c757d/ffffff?text=🎵";
+          }}
         />
         <div className="text-truncate" style={{ maxWidth: 120 }}>
-          <div className="fw-semibold text-truncate">{trackInfo} </div>
-          <div className="small text-white text-truncate">Artista</div>
+          <div className="fw-semibold text-truncate">{trackInfo.title}</div>
+          <div className="small text-white-50 text-truncate">
+            {trackInfo.artist}
+          </div>
         </div>
       </div>
 
@@ -90,14 +126,29 @@ export default function Player() {
           loop={false}
           ref={howlerRef}
           onLoad={handleLoad}
+          onLoadError={handleLoadError}
+          onEnd={() => setSeek(0)}
         />
 
         <button
-          onClick={togglePlay}
-          className="mt-1 mt-md-2 px-3 px-md-4 py-1 py-md-2 rounded bg-indigo-600 hover:bg-indigo-700"
+          onClick={handlePlay}
+          className="btn btn-primary rounded-circle d-flex align-items-center justify-content-center"
+          style={{ width: "40px", height: "40px" }}
+          disabled={isLoading}
         >
-          {isPlaying ? "⏸" : "▶"}
+          {isLoading ? (
+            <div className="spinner-border spinner-border-sm" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          ) : isPlaying ? (
+            "⏸"
+          ) : (
+            "▶"
+          )}
         </button>
+
+        {error && <div className="text-danger small mt-1">{error}</div>}
+
         {/* Progress Bar */}
         <div className="d-flex align-items-center gap-1 gap-md-2 w-100 mt-1 mt-md-2">
           <span className="small text-muted">{formatTime(seek)}</span>
@@ -134,6 +185,7 @@ export default function Player() {
           step={0.01}
           value={volume}
           onChange={handleVolume}
+          className="form-range"
           style={{ width: "72px", maxWidth: "20vw" }}
         />
         <button
@@ -146,6 +198,7 @@ export default function Player() {
           </svg>
         </button>
       </div>
+
       {/* Estilos responsivos */}
       <style>{`
         @media (max-width: 576px) {
@@ -157,6 +210,14 @@ export default function Player() {
           .player-container > div {
             margin-bottom: 6px;
           }
+        }
+        
+        .form-range::-webkit-slider-thumb {
+          background-color: #0d6efd;
+        }
+        
+        .form-range::-moz-range-thumb {
+          background-color: #0d6efd;
         }
       `}</style>
     </div>
