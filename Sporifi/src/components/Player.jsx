@@ -1,68 +1,124 @@
 import ReactHowler from "react-howler";
+import React, { useState, useRef, useEffect } from "react";
+import usePlayerStore from "../store/zustand";
 
 export default function Player() {
+  const musicList = usePlayerStore((state) => state.musicList);
+  const [seek, setSeek] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const howlerRef = useRef(null);
+  const { currentTrack, isPlaying, volume, togglePlay, setVolume } =
+    usePlayerStore();
+
+  if (!currentTrack) return null;
+
+  useEffect(() => {
+    let timer;
+    if (isPlaying) {
+      timer = setInterval(() => {
+        if (howlerRef.current) {
+          setSeek(howlerRef.current.seek());
+        }
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [isPlaying]);
+
+  const formatTime = (secs) => {
+    const min = Math.floor(secs / 60) || 0;
+    const sec = Math.floor(secs % 60) || 0;
+    return `${min}:${sec < 10 ? "0" : ""}${sec}`;
+  };
+
+  const handleLoad = () => {
+    if (howlerRef.current) {
+      setDuration(howlerRef.current.duration());
+    }
+  };
+
+  const handleSeek = (e) => {
+    const rect = e.target.getBoundingClientRect();
+    const percent = (e.clientX - rect.left) / rect.width;
+    const newSeek = percent * duration;
+    if (howlerRef.current) {
+      howlerRef.current.seek(newSeek);
+      setSeek(newSeek);
+    }
+  };
+
+  const handleVolume = (e) => {
+    setVolume(Number(e.target.value));
+  };
+
   return (
     <div
-      className="col-md-12 position-fixed bottom-0 start-0 text-white d-flex align-items-center justify-content-between px-4 py-3 shadow-lg player-container"
-      style={{ zIndex: 1050 }}
+      className="player-container bg-dark text-white d-flex flex-wrap align-items-center justify-content-between px-2 px-md-4 py-2 py-md-3 shadow-lg"
+      style={{
+        zIndex: 1050,
+        width: "100%",
+        left: 0,
+        bottom: 0,
+        position: "fixed",
+      }}
     >
       {/* Song Info */}
-      <div className="d-flex align-items-center flex-shrink-0">
+      <div
+        className="d-flex align-items-center flex-shrink-0"
+        style={{ minWidth: 0 }}
+      >
         <img
           src="https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228"
           alt="Album Art"
-          className="rounded me-3"
-          style={{ width: "48px", height: "48px", objectFit: "cover" }}
+          className="rounded me-2 me-md-3"
+          style={{ width: "40px", height: "40px", objectFit: "cover" }}
         />
-        <div className="text-truncate">
-          <div className="fw-semibold text-truncate">Nombre de la canción</div>
-          <div className="small text-muted text-truncate">Artista</div>
+        <div className="text-truncate" style={{ maxWidth: 120 }}>
+          <div className="fw-semibold text-truncate">{trackInfo} </div>
+          <div className="small text-white text-truncate">Artista</div>
         </div>
       </div>
 
       {/* Player Controls */}
-      <div className="d-flex flex-column align-items-center flex-grow-1 mx-4">
-        <div className="d-flex align-items-center gap-3">
-          <button
-            className="btn btn-link text-decoration-none p-0 btn-player"
-            style={{ color: "inherit" }}
-          >
-            <svg width="20" height="20" fill="currentColor">
-              <path d="M15 18l-6-6 6-6" />
-            </svg>
-          </button>
-          <button
-            className="btn btn-light rounded-circle p-2 d-flex align-items-center justify-content-center btn-player"
-            style={{ width: "48px", height: "48px" }}
-          >
-            <svg width="28" height="28" fill="currentColor">
-              <polygon points="6,4 24,14 6,24" />
-            </svg>
-          </button>
-          <button
-            className="btn btn-link text-decoration-none p-0 btn-player"
-            style={{ color: "inherit" }}
-          >
-            <svg width="20" height="20" fill="currentColor">
-              <path d="M5 6l6 6-6 6" />
-            </svg>
-          </button>
-        </div>
+      <div
+        className="d-flex flex-column align-items-center flex-grow-1 mx-2 mx-md-4"
+        style={{ minWidth: 0 }}
+      >
+        <ReactHowler
+          src={currentTrack}
+          playing={isPlaying}
+          volume={volume}
+          loop={false}
+          ref={howlerRef}
+          onLoad={handleLoad}
+        />
+
+        <button
+          onClick={togglePlay}
+          className="mt-1 mt-md-2 px-3 px-md-4 py-1 py-md-2 rounded bg-indigo-600 hover:bg-indigo-700"
+        >
+          {isPlaying ? "⏸" : "▶"}
+        </button>
         {/* Progress Bar */}
-        <div className="d-flex align-items-center gap-2 w-100 mt-2">
-          <span className="small text-muted">1:23</span>
-          <div className="progress flex-grow-1" style={{ height: "4px" }}>
+        <div className="d-flex align-items-center gap-1 gap-md-2 w-100 mt-1 mt-md-2">
+          <span className="small text-muted">{formatTime(seek)}</span>
+          <div
+            className="progress flex-grow-1"
+            style={{ height: "4px", cursor: "pointer", minWidth: 40 }}
+            onClick={handleSeek}
+          >
             <div
               className="progress-bar bg-success"
-              style={{ width: "40%" }}
+              style={{
+                width: duration ? `${(seek / duration) * 100}%` : "0%",
+              }}
             ></div>
           </div>
-          <span className="small text-muted">3:45</span>
+          <span className="small text-muted">{formatTime(duration)}</span>
         </div>
       </div>
 
       {/* Volume & Extras */}
-      <div className="d-flex align-items-center gap-3">
+      <div className="d-flex align-items-center gap-2 gap-md-3 flex-shrink-0">
         <button
           className="btn btn-link text-decoration-none p-0 btn-player"
           style={{ color: "inherit" }}
@@ -71,12 +127,15 @@ export default function Player() {
             <path d="M3 9v6h4l5 5V4L7 9H3z" />
           </svg>
         </button>
-        <div className="progress" style={{ width: "96px", height: "4px" }}>
-          <div
-            className="progress-bar bg-success"
-            style={{ width: "60%" }}
-          ></div>
-        </div>
+        <input
+          type="range"
+          min={0}
+          max={1}
+          step={0.01}
+          value={volume}
+          onChange={handleVolume}
+          style={{ width: "72px", maxWidth: "20vw" }}
+        />
         <button
           className="btn btn-link text-decoration-none p-0 btn-player"
           style={{ color: "inherit" }}
@@ -87,6 +146,19 @@ export default function Player() {
           </svg>
         </button>
       </div>
+      {/* Estilos responsivos */}
+      <style>{`
+        @media (max-width: 576px) {
+          .player-container {
+            flex-direction: column;
+            align-items: stretch;
+            padding: 8px 4px;
+          }
+          .player-container > div {
+            margin-bottom: 6px;
+          }
+        }
+      `}</style>
     </div>
   );
 }
