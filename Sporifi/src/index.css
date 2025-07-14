@@ -1,0 +1,103 @@
+/* Custom styles for Sporifi app */
+
+/* Player styles */
+.player-container {
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+}
+
+/* Custom button hover effects */
+.btn-player {
+  transition: all 0.3s ease;
+}
+
+.btn-player:hover {
+  transform: scale(1.05);
+}
+
+/* Progress bar custom styles */
+.progress {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.progress-bar {
+  transition: width 0.3s ease;
+}
+
+/* Navbar custom styles */
+.navbar-dark {
+  background: linear-gradient(90deg, #1e3c72 0%, #2a5298 100%) !important;
+}
+
+/* Form control dark theme */
+.form-control.bg-dark {
+  background-color: #343a40 !important;
+  border-color: #6c757d !important;
+  color: white !important;
+}
+
+.form-control.bg-dark::placeholder {
+  color: #adb5bd !important;
+}
+
+.form-control.bg-dark:focus {
+  background-color: #495057 !important;
+  border-color: #0d6efd !important;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25) !important;
+}
+
+/* Dropdown dark theme */
+.dropdown-menu {
+  background-color: #343a40;
+  border-color: #6c757d;
+}
+
+.dropdown-item {
+  color: #f8f9fa;
+}
+
+.dropdown-item:hover {
+  background-color: #495057;
+  color: #f8f9fa;
+}
+
+/* Force profile dropdown to open to the left */
+.profile-dropdown {
+  right: auto !important;
+  left: 0 !important;
+  transform: translateX(-100%) !important;
+}
+
+.profile-dropdown.show {
+  right: auto !important;
+  left: 0 !important;
+  transform: translateX(-100%) !important;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Body background */
+body {
+  background-color: #f8f9fa;
+}
+
+/* Main content area */
+main {
+  min-height: calc(100vh - 80px); /* Adjust based on navbar height */
+  padding-bottom: 80px; /* Space for fixed player */
+}

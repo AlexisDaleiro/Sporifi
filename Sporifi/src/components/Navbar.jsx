@@ -1,4 +1,5 @@
 import { React, useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function Navbar() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -7,41 +8,40 @@ export default function Navbar() {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    // Handle search functionality here
+
     console.log("Searching for:", searchQuery);
   };
 
   const handleAction1 = () => {
-    // Handle Action 1 functionality here
     console.log("Action 1 clicked");
   };
 
   const handleAction2 = () => {
-    // Handle Action 2 functionality here
     console.log("Action 2 clicked");
   };
 
   return (
     <div>
-      <div className="min-h-full">
-        <nav className="bg-gray-800">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="flex h-16 items-center justify-between">
-              {/* Left side - Logo and Navigation */}
-              <div className="flex items-center">
-                <div className="shrink-0">
-                  <img
-                    className="size-8"
-                    src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
-                    alt="Your Company"
-                  />
+      <div className="mb-5">
+        <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+          <div className="container-fluid">
+            <div className="d-flex align-items-center justify-content-between w-100">
+              <div className="d-flex align-items-center">
+                <div className="flex-shrink-0">
+                  <Link to={"/"}>
+                    <img
+                      className="img-fluid"
+                      style={{ width: "32px", height: "32px" }}
+                      src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
+                      alt="Your Company"
+                    />
+                  </Link>
                 </div>
-                <div className="hidden md:block">
-                  <div className="ml-10 flex items-baseline space-x-4">
-                    {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
+                <div className="d-none d-md-block">
+                  <div className="ms-4 d-flex align-items-baseline gap-3">
                     <a
                       href="#"
-                      className="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white"
+                      className="btn btn-dark rounded px-3 py-2 text-decoration-none"
                       aria-current="page"
                     >
                       Dashboard
@@ -50,13 +50,16 @@ export default function Navbar() {
                 </div>
               </div>
 
-              {/* Center - Search Bar */}
-              <div className="hidden md:block flex-1 max-w-md mx-auto">
-                <form onSubmit={handleSearch} className="relative">
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <div
+                className="d-none d-md-block flex-grow-1 mx-auto"
+                style={{ maxWidth: "400px" }}
+              >
+                <form onSubmit={handleSearch} className="position-relative">
+                  <div className="position-relative">
+                    <div className="position-absolute top-50 start-0 translate-middle-y ps-3 d-flex align-items-center">
                       <svg
-                        className="h-5 w-5 text-gray-400"
+                        className="text-muted"
+                        style={{ width: "20px", height: "20px" }}
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -73,42 +76,38 @@ export default function Navbar() {
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="block w-full pl-10 pr-3 py-2 border border-gray-600 rounded-md leading-5 bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:placeholder-gray-500 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      className="form-control ps-5 pe-3 py-2 border-secondary bg-dark text-white"
                       placeholder="Search..."
                     />
                   </div>
                 </form>
               </div>
 
-              {/* Right side - Action Buttons and Profile */}
-              <div className="hidden md:block">
-                <div className="ml-4 flex items-center md:ml-6 space-x-4">
-                  {/* Action Button 1 */}
+              <div className="d-none d-md-block">
+                <div className="ms-4 d-flex align-items-center gap-4">
                   <button
                     type="button"
                     onClick={handleAction1}
-                    className="relative rounded-md bg-indigo-600 px-3 py-2 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800"
+                    className="btn btn-primary px-3 py-2"
                   >
                     Action 1
                   </button>
 
-                  {/* Action Button 2 */}
                   <button
                     type="button"
                     onClick={handleAction2}
-                    className="relative rounded-md bg-gray-700 px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-600 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                    className="btn btn-secondary px-3 py-2"
                   >
                     Action 2
                   </button>
 
                   <button
                     type="button"
-                    className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-none"
+                    className="btn btn-link text-decoration-none p-1 rounded-circle"
                   >
-                    <span className="absolute -inset-1.5"></span>
-                    <span className="sr-only">View notifications</span>
+                    <span className="visually-hidden">View notifications</span>
                     <svg
-                      className="size-6"
+                      style={{ width: "24px", height: "24px" }}
                       fill="none"
                       viewBox="0 0 24 24"
                       strokeWidth="1.5"
@@ -124,94 +123,78 @@ export default function Navbar() {
                     </svg>
                   </button>
 
-                  {/* Profile dropdown */}
-                  <div className="relative ml-3">
-                    <div>
-                      <button
-                        type="button"
-                        className="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-gray-800"
-                        id="user-menu-button"
-                        aria-expanded={isProfileOpen}
-                        aria-haspopup="true"
-                        onClick={() => setIsProfileOpen(!isProfileOpen)}
-                      >
-                        <span className="absolute -inset-1.5"></span>
-                        <span className="sr-only">Open user menu</span>
-                        <img
-                          className="size-8 rounded-full"
-                          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                          alt=""
-                        />
-                      </button>
-                    </div>
+                  <div className="dropdown">
+                    <button
+                      type="button"
+                      className="btn btn-link text-decoration-none p-0 rounded-circle"
+                      id="user-menu-button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded={isProfileOpen}
+                      onClick={() => setIsProfileOpen(!isProfileOpen)}
+                    >
+                      <span className="visually-hidden">Open user menu</span>
+                      <img
+                        className="rounded-circle"
+                        style={{ width: "32px", height: "32px" }}
+                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                        alt=""
+                      />
+                    </button>
 
-                    {/* 
-                      Dropdown menu, show/hide based on menu state.
-
-                      Entering: "transition ease-out duration-100"
-                        From: "transform opacity-0 scale-95"
-                        To: "transform opacity-100 scale-100"
-                      Leaving: "transition ease-in duration-75"
-                        From: "transform opacity-100 scale-100"
-                        To: "transform opacity-0 scale-95"
-                    */}
-                    {isProfileOpen && (
-                      <div
-                        className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5 focus:outline-none"
-                        role="menu"
-                        aria-orientation="vertical"
-                        aria-labelledby="user-menu-button"
-                        tabIndex={-1}
-                      >
-                        {/* Active: "bg-gray-100 outline-none", Not Active: "" */}
+                    <ul
+                      className={`dropdown-menu profile-dropdown ${
+                        isProfileOpen ? "show" : ""
+                      }`}
+                      role="menu"
+                      aria-labelledby="user-menu-button"
+                    >
+                      <li>
                         <a
                           href="#"
-                          className="block px-4 py-2 text-sm text-gray-700"
+                          className="dropdown-item"
                           role="menuitem"
-                          tabIndex={-1}
                           id="user-menu-item-0"
                         >
                           Your Profile
                         </a>
+                      </li>
+                      <li>
                         <a
                           href="#"
-                          className="block px-4 py-2 text-sm text-gray-700"
+                          className="dropdown-item"
                           role="menuitem"
-                          tabIndex={-1}
                           id="user-menu-item-1"
                         >
                           Settings
                         </a>
+                      </li>
+                      <li>
                         <a
                           href="#"
-                          className="block px-4 py-2 text-sm text-gray-700"
+                          className="dropdown-item"
                           role="menuitem"
-                          tabIndex={-1}
                           id="user-menu-item-2"
                         >
                           Sign out
                         </a>
-                      </div>
-                    )}
+                      </li>
+                    </ul>
                   </div>
                 </div>
               </div>
-              <div className="-mr-2 flex md:hidden">
-                {/* Mobile menu button */}
+              <div className="d-md-none">
                 <button
                   type="button"
-                  className="relative inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-none"
+                  className="btn btn-link text-decoration-none p-2 rounded"
                   aria-controls="mobile-menu"
                   aria-expanded={isMobileMenuOpen}
                   onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 >
-                  <span className="absolute -inset-0.5"></span>
-                  <span className="sr-only">Open main menu</span>
-                  {/* Menu open: "hidden", Menu closed: "block" */}
+                  <span className="visually-hidden">Open main menu</span>
+
                   <svg
-                    className={`${
-                      isMobileMenuOpen ? "hidden" : "block"
-                    } size-6`}
+                    className={`${isMobileMenuOpen ? "d-none" : "d-block"}`}
+                    style={{ width: "24px", height: "24px" }}
                     fill="none"
                     viewBox="0 0 24 24"
                     strokeWidth="1.5"
@@ -225,11 +208,10 @@ export default function Navbar() {
                       d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
                     />
                   </svg>
-                  {/* Menu open: "block", Menu closed: "hidden" */}
+
                   <svg
-                    className={`${
-                      isMobileMenuOpen ? "block" : "hidden"
-                    } size-6`}
+                    className={`${isMobileMenuOpen ? "d-block" : "d-none"}`}
+                    style={{ width: "24px", height: "24px" }}
                     fill="none"
                     viewBox="0 0 24 24"
                     strokeWidth="1.5"
@@ -248,16 +230,15 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* Mobile menu, show/hide based on menu state. */}
           {isMobileMenuOpen && (
-            <div className="md:hidden" id="mobile-menu">
-              {/* Search Bar - Mobile */}
-              <div className="px-2 pt-2 pb-3">
-                <form onSubmit={handleSearch} className="relative">
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <div className="d-md-none w-100" id="mobile-menu">
+              <div className="px-3 pt-3 pb-3">
+                <form onSubmit={handleSearch} className="position-relative">
+                  <div className="position-relative">
+                    <div className="position-absolute top-50 start-0 translate-middle-y ps-3 d-flex align-items-center">
                       <svg
-                        className="h-5 w-5 text-gray-400"
+                        className="text-muted"
+                        style={{ width: "20px", height: "20px" }}
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -274,92 +255,86 @@ export default function Navbar() {
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="block w-full pl-10 pr-3 py-2 border border-gray-600 rounded-md leading-5 bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:placeholder-gray-500 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 text-base"
+                      className="form-control ps-5 pe-3 py-2 border-secondary bg-dark text-white"
                       placeholder="Search..."
                     />
                   </div>
                 </form>
               </div>
 
-              {/* Action Buttons - Mobile */}
-              <div className="px-2 pb-3">
-                <div className="flex space-x-2">
+              <div className="px-3 pb-3">
+                <div className="d-flex gap-2">
                   <button
                     type="button"
                     onClick={handleAction1}
-                    className="flex-1 rounded-md bg-indigo-600 px-3 py-2 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800"
+                    className="btn btn-primary flex-fill px-3 py-2"
                   >
                     Action 1
                   </button>
                   <button
                     type="button"
                     onClick={handleAction2}
-                    className="flex-1 rounded-md bg-gray-700 px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-600 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                    className="btn btn-secondary flex-fill px-3 py-2"
                   >
                     Action 2
                   </button>
                 </div>
               </div>
 
-              <div className="space-y-1 px-2 pb-3 sm:px-3">
-                {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
+              <div className="px-3 pb-3">
                 <a
                   href="#"
-                  className="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white"
+                  className="btn btn-dark w-100 text-start px-3 py-2 mb-2"
                   aria-current="page"
                 >
                   Dashboard
                 </a>
                 <a
                   href="#"
-                  className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+                  className="btn btn-link w-100 text-start px-3 py-2 mb-2 text-decoration-none"
                 >
                   Team
                 </a>
                 <a
                   href="#"
-                  className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+                  className="btn btn-link w-100 text-start px-3 py-2 mb-2 text-decoration-none"
                 >
                   Projects
                 </a>
                 <a
                   href="#"
-                  className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+                  className="btn btn-link w-100 text-start px-3 py-2 mb-2 text-decoration-none"
                 >
                   Calendar
                 </a>
                 <a
                   href="#"
-                  className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+                  className="btn btn-link w-100 text-start px-3 py-2 mb-2 text-decoration-none"
                 >
                   Reports
                 </a>
               </div>
-              <div className="border-t border-gray-700 pt-4 pb-3">
-                <div className="flex items-center px-5">
-                  <div className="shrink-0">
+              <div className="border-top border-secondary pt-4 pb-3">
+                <div className="d-flex align-items-center px-4">
+                  <div className="flex-shrink-0">
                     <img
-                      className="size-10 rounded-full"
+                      className="rounded-circle"
+                      style={{ width: "40px", height: "40px" }}
                       src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                       alt=""
                     />
                   </div>
-                  <div className="ml-3">
-                    <div className="text-base/5 font-medium text-white">
-                      Tom Cook
-                    </div>
-                    <div className="text-sm font-medium text-gray-400">
-                      tom@example.com
-                    </div>
+                  <div className="ms-3">
+                    <div className="fw-medium text-white">Tom Cook</div>
+                    <div className="small text-muted">tom@example.com</div>
                   </div>
                   <button
                     type="button"
-                    className="relative ml-auto shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-none"
+                    className="btn btn-link text-decoration-none p-1 rounded-circle ms-auto"
                   >
-                    <span className="absolute -inset-1.5"></span>
-                    <span className="sr-only">View notifications</span>
+                    <span className="visually-hidden">View notifications</span>
                     <svg
-                      className="size-6"
+                      style={{ width: "24px", height: "24px" }}
                       fill="none"
                       viewBox="0 0 24 24"
                       strokeWidth="1.5"
@@ -375,22 +350,22 @@ export default function Navbar() {
                     </svg>
                   </button>
                 </div>
-                <div className="mt-3 space-y-1 px-2">
+                <div className="mt-3 px-3">
                   <a
                     href="#"
-                    className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
+                    className="btn btn-link w-100 text-start px-3 py-2 mb-2 text-decoration-none"
                   >
                     Your Profile
                   </a>
                   <a
                     href="#"
-                    className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
+                    className="btn btn-link w-100 text-start px-3 py-2 mb-2 text-decoration-none"
                   >
                     Settings
                   </a>
                   <a
                     href="#"
-                    className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
+                    className="btn btn-link w-100 text-start px-3 py-2 mb-2 text-decoration-none"
                   >
                     Sign out
                   </a>
