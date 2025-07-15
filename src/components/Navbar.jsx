@@ -88,17 +88,17 @@ export default function Navbar() {
                   <button
                     type="button"
                     onClick={handleAction1}
-                    className="btn btn-primary px-3 py-2"
+                    className="btn btn-primary px-3 py-2 rounded-5"
                   >
-                    Action 1
+                    Descubre premium
                   </button>
 
                   <button
                     type="button"
                     onClick={handleAction2}
-                    className="btn btn-secondary px-3 py-2"
+                    className="btn btn-secondary px-3 py-2 rounded-5"
                   >
-                    Action 2
+                    Instalar App
                   </button>
 
                   <button

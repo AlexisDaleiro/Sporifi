@@ -6,7 +6,7 @@ const usePlayerStore = create((set) => ({
       src: "/src/assets/Charlie Puth - How Long.mp3",
       title: "How Long",
       artist: "Charlie Puth",
-      cover: "https://via.placeholder.com/150/1e3c72/ffffff?text=CP",
+      cover: "/src/assets/charlieputh.jpg",
     },
     {
       src: "/src/assets/Barns Courtney - Mother Teresa.flac",
