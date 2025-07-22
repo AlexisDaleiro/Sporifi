@@ -3,20 +3,26 @@ import React, { useState, useRef, useEffect } from "react";
 import usePlayerStore from "../store/zustand";
 
 export default function Player() {
-  const musicList = usePlayerStore((state) => state.musicList);
+  const { 
+    currentTrack, 
+    isPlaying, 
+    volume, 
+    togglePlay, 
+    setVolume, 
+    trackInfo,
+    nextTrack,
+    prevTrack 
+  } = usePlayerStore();
+  
   const [seek, setSeek] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const howlerRef = useRef(null);
-  const { currentTrack, isPlaying, volume, togglePlay, setVolume, trackInfo } =
-    usePlayerStore();
-
-  if (!currentTrack || !trackInfo) return null;
 
   useEffect(() => {
     let timer;
-    if (isPlaying) {
+    if (isPlaying && currentTrack) {
       // Si está reproduciendo, asumimos que ya no está cargando
       setIsLoading(false);
       timer = setInterval(() => {
@@ -26,7 +32,7 @@ export default function Player() {
       }, 1000);
     }
     return () => clearInterval(timer);
-  }, [isPlaying]);
+  }, [isPlaying, currentTrack]);
 
   // Reset loading state when track changes
   useEffect(() => {
@@ -55,7 +61,7 @@ export default function Player() {
   };
 
   const handleSeek = (e) => {
-    if (!duration) return;
+    if (!duration || !currentTrack) return;
     const rect = e.target.getBoundingClientRect();
     const percent = (e.clientX - rect.left) / rect.width;
     const newSeek = percent * duration;
@@ -72,11 +78,7 @@ export default function Player() {
   const handlePlay = () => {
     if (!isLoading) {
       setError(null);
-      console.log("Current isPlaying state:", isPlaying);
-      // Pequeño delay para asegurar que ReactHowler responda correctamente
-      setTimeout(() => {
-        togglePlay();
-      }, 50);
+      togglePlay();
     }
   };
 
@@ -119,48 +121,73 @@ export default function Player() {
         className="d-flex flex-column align-items-center flex-grow-1 mx-2 mx-md-4"
         style={{ minWidth: 0 }}
       >
-        <ReactHowler
-          src={currentTrack}
-          playing={isPlaying}
-          volume={volume}
-          loop={false}
-          ref={howlerRef}
-          onLoad={handleLoad}
-          onLoadError={handleLoadError}
-          onEnd={() => setSeek(0)}
-        />
+        {currentTrack && (
+          <ReactHowler
+            src={currentTrack}
+            playing={isPlaying}
+            volume={volume}
+            loop={false}
+            ref={howlerRef}
+            onLoad={handleLoad}
+            onLoadError={handleLoadError}
+            onEnd={() => nextTrack()}
+          />
+        )}
 
-        <button
-          onClick={handlePlay}
-          className="btn btn-primary rounded-circle d-flex align-items-center justify-content-center"
-          style={{ width: "40px", height: "40px" }}
-          disabled={isLoading}
-        >
-          {isLoading ? (
-            <div className="spinner-border spinner-border-sm" role="status">
-              <span className="visually-hidden">Loading...</span>
-            </div>
-          ) : isPlaying ? (
-            "⏸"
-          ) : (
-            "▶"
-          )}
-        </button>
+        <div className="d-flex align-items-center gap-2 mb-1">
+          {/* Botón Anterior */}
+          <button
+            onClick={prevTrack}
+            className="btn btn-outline-light btn-sm rounded-circle d-flex align-items-center justify-content-center"
+            style={{ width: "32px", height: "32px" }}
+            disabled={!currentTrack}
+          >
+            ⏮
+          </button>
+          
+          {/* Botón Play/Pause */}
+          <button
+            onClick={handlePlay}
+            className="btn btn-primary rounded-circle d-flex align-items-center justify-content-center"
+            style={{ width: "40px", height: "40px" }}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <div className="spinner-border spinner-border-sm" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+            ) : isPlaying && currentTrack ? (
+              "⏸"
+            ) : (
+              "▶"
+            )}
+          </button>
+          
+          {/* Botón Siguiente */}
+          <button
+            onClick={nextTrack}
+            className="btn btn-outline-light btn-sm rounded-circle d-flex align-items-center justify-content-center"
+            style={{ width: "32px", height: "32px" }}
+            disabled={!currentTrack}
+          >
+            ⏭
+          </button>
+        </div>
 
         {error && <div className="text-danger small mt-1">{error}</div>}
 
         {/* Progress Bar */}
-        <div className="d-flex align-items-center gap-1 gap-md-2 w-100 mt-1 mt-md-2">
+        <div className="d-flex align-items-center gap-1 gap-md-2 w-100 mt-1">
           <span className="small text-muted">{formatTime(seek)}</span>
           <div
             className="progress flex-grow-1"
-            style={{ height: "4px", cursor: "pointer", minWidth: 40 }}
+            style={{ height: "4px", cursor: currentTrack ? "pointer" : "default", minWidth: 40 }}
             onClick={handleSeek}
           >
             <div
               className="progress-bar bg-success"
               style={{
-                width: duration ? `${(seek / duration) * 100}%` : "0%",
+                width: duration && currentTrack ? `${(seek / duration) * 100}%` : "0%",
               }}
             ></div>
           </div>

@@ -1,5 +1,6 @@
 import { React, useState } from "react";
 import { Link } from "react-router-dom";
+import Buypremium from "../pages/Buypremium";
 
 export default function Navbar() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -22,22 +23,22 @@ export default function Navbar() {
 
   return (
     <div>
-      <div className="mb-5">
+      <div className="">
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
           <div className="container-fluid">
             <div className="d-flex align-items-center justify-content-between w-100">
               <div className="d-flex align-items-center">
-                <div className="flex-shrink-0">
+                <div className="flex-shrink-0 d-flex justify-content-between ms-5">
                   <Link to={"/"}>
                     <img
                       className="img-fluid"
-                      style={{ width: "32px", height: "32px" }}
-                      src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
+                      style={{}}
+                      src="./src/assets/spotify-ar21.svg"
                       alt="Your Company"
                     />
                   </Link>
                 </div>
-                <div className="d-none d-md-block">
+                {/* <div className="d-none d-md-block">
                   <div className="ms-4 d-flex align-items-baseline gap-3">
                     <a
                       href="#"
@@ -47,7 +48,7 @@ export default function Navbar() {
                       Dashboard
                     </a>
                   </div>
-                </div>
+                </div> */}
               </div>
 
               <div
@@ -85,14 +86,15 @@ export default function Navbar() {
 
               <div className="d-none d-md-block">
                 <div className="ms-4 d-flex align-items-center gap-4">
-                  <button
-                    type="button"
-                    onClick={handleAction1}
-                    className="btn btn-primary px-3 py-2 rounded-5"
-                  >
-                    Descubre premium
-                  </button>
-
+                  <Link to={"/premium"}>
+                    <button
+                      type="button"
+                      onClick={handleAction1}
+                      className="btn btn-primary px-3 py-2 rounded-5"
+                    >
+                      Descubre premium
+                    </button>
+                  </Link>
                   <button
                     type="button"
                     onClick={handleAction2}

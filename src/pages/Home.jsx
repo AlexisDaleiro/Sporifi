@@ -1,5 +1,6 @@
 import React from "react";
 import usePlayerStore from "../store/zustand";
+import { Link, Links } from "react-router-dom";
 
 export default function Home() {
   const { musicList, setTrack, currentTrack, isPlaying } = usePlayerStore();
@@ -35,7 +36,9 @@ export default function Home() {
               />
               <div className="card-body d-flex flex-column">
                 <h5 className="card-title text-truncate">{track.title}</h5>
-                <p className="card-text text-muted">{track.artist}</p>
+                <Link to={`/artist/${track.artist}`}>
+                  <p className="card-text text-muted">{track.artist}</p>
+                </Link>
                 <button
                   className="btn btn-primary mt-auto"
                   onClick={() => handlePlayTrack(track)}
