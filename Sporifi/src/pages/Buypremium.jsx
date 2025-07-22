@@ -91,7 +91,7 @@ export default function Buypremium() {
                         publicidad, con Sporify Premium{" "}
                       </p>
                       <button className="btn btn-light">
-                        Pasar a premium individual
+                        Pasar a premium duo
                       </button>
                     </div>
                   </div>
@@ -107,7 +107,7 @@ export default function Buypremium() {
                         publicidad, con Sporify Premium{" "}
                       </p>
                       <button className="btn btn-light">
-                        Pasar a premium individual
+                        Pasar a premium familiar
                       </button>
                     </div>
                   </div>
