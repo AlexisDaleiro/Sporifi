@@ -7,8 +7,6 @@ export default function Artist() {
   const [artista, setArtista] = useState(null);
   const [releases, setReleases] = useState([]);
 
-  const BASE_URL = "https://musicbrainz.org/ws/2/artist?query=artist:";
-
   useEffect(() => {
     axios
       .get(`https://musicbrainz.org/ws/2/artist?query=artist:${id}&fmt=json`)
@@ -32,7 +30,7 @@ export default function Artist() {
       {!artista ? (
         <p>Cargando artista...</p>
       ) : (
-        <div className="row">
+        <div className="row p-5">
           {firstRelease ? (
             <div className="col-md-4">
               <img

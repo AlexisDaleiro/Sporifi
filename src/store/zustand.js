@@ -26,6 +26,12 @@ const usePlayerStore = create((set, get) => ({
       artist: "The Heavy",
       cover: "/src/assets/theheavy.jpg",
     },
+    {
+      src: "Thirty Seconds to Mars",
+      title: "Thirty Seconds to Mars",
+      artist: "The Killers",
+      cover: "/src/assets/thekillers.jpg",
+    },
   ],
 
   currentTrack: null, // No hay canción seleccionada inicialmente
@@ -41,7 +47,7 @@ const usePlayerStore = create((set, get) => ({
   setTrack: (track) => {
     const state = get();
     const trackIndex = state.musicList.findIndex((t) => t.src === track.src);
-    
+
     set({
       currentTrack: track.src,
       currentTrackIndex: trackIndex,
@@ -61,9 +67,9 @@ const usePlayerStore = create((set, get) => ({
       set({ isPlaying: !state.isPlaying });
     }
   },
-  
+
   setVolume: (volume) => set({ volume }),
-  
+
   nextTrack: () => {
     const state = get();
     if (state.currentTrackIndex >= 0 && state.musicList.length > 0) {
@@ -72,11 +78,13 @@ const usePlayerStore = create((set, get) => ({
       get().setTrack(nextTrack);
     }
   },
-  
+
   prevTrack: () => {
     const state = get();
     if (state.currentTrackIndex >= 0 && state.musicList.length > 0) {
-      const prevIndex = (state.currentTrackIndex - 1 + state.musicList.length) % state.musicList.length;
+      const prevIndex =
+        (state.currentTrackIndex - 1 + state.musicList.length) %
+        state.musicList.length;
       const prevTrack = state.musicList[prevIndex];
       get().setTrack(prevTrack);
     }
