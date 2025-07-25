@@ -144,3 +144,122 @@
   margin-right: 0.5rem;
   color: gray;
 }
+
+/* Estilos para las tarjetas de planes de Spotify */
+.spotify-plan-card {
+  background-color: white;
+  border-radius: 10px;
+  padding: 24px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border: 2px solid #ddd;
+  position: relative;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.spotify-plan-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.plan-popular-badge {
+  position: absolute;
+  top: -12px;
+  right: 20px;
+  background-color: #1db954;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: bold;
+  padding: 4px 12px;
+  border-radius: 12px;
+}
+
+.plan-header {
+  margin-bottom: 20px;
+}
+
+.plan-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.plan-subtitle {
+  color: #6c757d;
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+}
+
+.plan-payment {
+  color: #6c757d;
+  font-size: 0.8rem;
+  margin-bottom: 0;
+}
+
+.plan-price {
+  margin-bottom: 20px;
+}
+
+.plan-price h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0;
+}
+
+.plan-price p {
+  color: #6c757d;
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+
+.plan-divider {
+  margin: 20px 0;
+  border-color: #eee;
+}
+
+.plan-features {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 30px;
+}
+
+.plan-features li {
+  margin-bottom: 12px;
+  display: flex;
+  align-items: flex-start;
+  line-height: 1.4;
+}
+
+.plan-check-icon {
+  color: #1db954;
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.plan-button {
+  width: 100%;
+  padding: 12px;
+  border-radius: 30px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid;
+  margin-bottom: 15px;
+  font-size: 0.9rem;
+}
+
+.plan-button:hover {
+  opacity: 0.9;
+  transform: scale(1.02);
+}
+
+.plan-terms {
+  text-align: center;
+  color: #6c757d;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  margin-bottom: 0;
+}

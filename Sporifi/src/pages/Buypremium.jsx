@@ -1,6 +1,14 @@
 import NavBar from "../components/Navbar";
+import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Modal } from "react-bootstrap";
+import PIndividual from "../components/PIndividual";
 
 export default function Buypremium() {
+  const [modal, setModal] = useState(false);
+  const [modal2, setModal2] = useState(false);
+  const handleCloseModal2 = () => setModal2(false);
+  const handleCloseModal = () => setModal(false);
   return (
     <>
       <div className="container-fluid">
@@ -19,17 +27,76 @@ export default function Buypremium() {
                   </button>
                 </div>
                 <div className="col-md-6 ">
-                  <button className="btn btn-outline-light">
+                  <button
+                    onClick={() => setModal2(true)}
+                    className="btn btn-outline-light"
+                  >
                     Ver todos los planes
                   </button>
+                  <div>
+                    <Modal show={modal2} onHide={handleCloseModal2} size="xl">
+                      <Modal.Header closeButton>
+                        <Modal.Title>Todos los planes</Modal.Title>
+                      </Modal.Header>
+                      <Modal.Body className="row ">
+                        <div className="col-md-4">
+                          <PIndividual />
+                        </div>
+
+                        <div className="col-md-4">
+                          <PIndividual
+                            planType="Duo"
+                            price="14.99"
+                            period="mes"
+                            features={[
+                              "Escucha tu musica favorita sin anuncios",
+                              "Descarga de canciones para disfrutarlas sin conexion",
+                              "Escucha canciones en cualquier orden",
+                              "Calidad del audio alta",
+                              "Escucha lo que quieras con tus amigos, en tiempo real",
+                            ]}
+                            isPopular={true}
+                          />
+                        </div>
+                        <div className="col-md-4">
+                          <PIndividual
+                            planType="Familiar"
+                            price="19.99"
+                            period="mes"
+                            features={[
+                              "Escucha tu musica favorita sin anuncios",
+                              "Descarga de canciones para disfrutarlas sin conexion",
+                              "Escucha canciones en cualquier orden",
+                              "Calidad del audio alta",
+                              "Escucha lo que quieras con tus familiares, en tiempo real",
+                            ]}
+                          />
+                        </div>
+                      </Modal.Body>
+                      <Modal.Footer></Modal.Footer>
+                    </Modal>
+                  </div>
                 </div>
               </div>
             </div>
             <div className="row">
               <div className="col-md-12">
-                <a className="text-white text-decoration-none" href="#">
-                  Consulte las condiciones
-                </a>
+                <Link to={"/premium/condiciones"}>
+                  <button className="btn text-white text-decoration-none">
+                    Consulte las condiciones
+                  </button>{" "}
+                </Link>
+
+                <div>
+                  <Modal show={modal} onHide={handleCloseModal}>
+                    <Modal.Header closeButton>
+                      <Modal.Title>Modal heading</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                      Woohoo, you're reading this text in a modal!
+                    </Modal.Body>
+                  </Modal>
+                </div>
               </div>
             </div>
           </div>

@@ -3,17 +3,17 @@ import React, { useState, useRef, useEffect } from "react";
 import usePlayerStore from "../store/zustand";
 
 export default function Player() {
-  const { 
-    currentTrack, 
-    isPlaying, 
-    volume, 
-    togglePlay, 
-    setVolume, 
+  const {
+    currentTrack,
+    isPlaying,
+    volume,
+    togglePlay,
+    setVolume,
     trackInfo,
     nextTrack,
-    prevTrack 
+    prevTrack,
   } = usePlayerStore();
-  
+
   const [seek, setSeek] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -84,7 +84,7 @@ export default function Player() {
 
   return (
     <div
-      className="player-container bg-dark text-white d-flex flex-wrap align-items-center justify-content-between px-2 px-md-4 py-2 py-md-3 shadow-lg"
+      className="player-container bg-dark text-white d-flex flex-wrap align-items-center justify-content-between px-2 px-md-4 py-2 py-md-3 shadow-lg rounded-5 "
       style={{
         zIndex: 1050,
         width: "100%",
@@ -144,7 +144,7 @@ export default function Player() {
           >
             ⏮
           </button>
-          
+
           {/* Botón Play/Pause */}
           <button
             onClick={handlePlay}
@@ -162,7 +162,7 @@ export default function Player() {
               "▶"
             )}
           </button>
-          
+
           {/* Botón Siguiente */}
           <button
             onClick={nextTrack}
@@ -181,13 +181,20 @@ export default function Player() {
           <span className="small text-muted">{formatTime(seek)}</span>
           <div
             className="progress flex-grow-1"
-            style={{ height: "4px", cursor: currentTrack ? "pointer" : "default", minWidth: 40 }}
+            style={{
+              height: "4px",
+              cursor: currentTrack ? "pointer" : "default",
+              minWidth: 40,
+            }}
             onClick={handleSeek}
           >
             <div
               className="progress-bar bg-success"
               style={{
-                width: duration && currentTrack ? `${(seek / duration) * 100}%` : "0%",
+                width:
+                  duration && currentTrack
+                    ? `${(seek / duration) * 100}%`
+                    : "0%",
               }}
             ></div>
           </div>
