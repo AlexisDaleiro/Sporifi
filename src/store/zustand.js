@@ -32,6 +32,18 @@ const usePlayerStore = create((set, get) => ({
       artist: "The Killers",
       cover: "/src/assets/thekillers.jpg",
     },
+    {
+      src: "Oh The Larceny - Can t Stop Me Now.flac",
+      title: "Can't Stop Me Now",
+      artist: "Oh The Larceny",
+      cover: "/src/assets/onthelarceny.webp",
+    },
+    {
+      src: "Innerpartysystem - Don't Stop (Album Version Explicit)",
+      title: "Don't Stop",
+      artist: "Innerpartysystem",
+      cover: "/src/assets/innerpartysystem.jpg",
+    },
   ],
 
   currentTrack: null, // No hay canción seleccionada inicialmente

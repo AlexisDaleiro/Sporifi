@@ -10,13 +10,125 @@ export default function Home() {
   };
 
   return (
-    <div className="container-fluid py-4">
+    <div className="container p-5 py-4">
+      <div className="row">
+        <div className="mb-3">
+          <span>
+            <button className="btn btn-secondary shadow-lg me-2 rounded-5">
+              Todo
+            </button>
+          </span>
+          <span>
+            <button className="btn btn-secondary shadow-lg me-2 rounded-5">
+              Musica
+            </button>
+          </span>
+          <span>
+            <button className="btn btn-secondary shadow-lg me-2 rounded-5">
+              Podcast
+            </button>
+          </span>
+        </div>
+      </div>
+      <div className="row">
+        <div className="col-md-3">
+          <div className="card mb-3" style={{ cursor: "pointer" }}>
+            <div className="row g-0">
+              <div className="col-md-4">
+                <img
+                  src="https://picsum.photos/200/300"
+                  className="img-fluid rounded-start"
+                  alt="..."
+                  style={{
+                    maxHeight: "65px",
+                    objectFit: "cover",
+                    width: "80px",
+                  }}
+                />
+              </div>
+              <div className="col-md-8">
+                <div className="card-body">
+                  <h5 className="card-title">Mix Diario 1</h5>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="col-md-3">
+          <div className="card mb-3" style={{ cursor: "pointer" }}>
+            <div className="row g-0">
+              <div className="col-md-4">
+                <img
+                  src="https://picsum.photos/200/300"
+                  className="img-fluid rounded-start"
+                  alt="..."
+                  style={{
+                    maxHeight: "65px",
+                    objectFit: "cover",
+                    width: "80px",
+                  }}
+                />
+              </div>
+              <div className="col-md-8">
+                <div className="card-body">
+                  <h5 className="card-title">Mix Diario 2</h5>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="col-md-3">
+          <div className="card mb-3" style={{ cursor: "pointer" }}>
+            <div className="row g-0">
+              <div className="col-md-4">
+                <img
+                  src="https://picsum.photos/200/300"
+                  className="img-fluid rounded-start"
+                  alt="..."
+                  style={{
+                    maxHeight: "65px",
+                    objectFit: "cover",
+                    width: "80px",
+                  }}
+                />
+              </div>
+              <div className="col-md-8">
+                <div className="card-body">
+                  <h5 className="card-title">Mix Diario 3</h5>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="col-md-3">
+          <div className="card mb-3" style={{ cursor: "pointer" }}>
+            <div className="row g-0">
+              <div className="col-md-4">
+                <img
+                  src="https://picsum.photos/200/300"
+                  className="img-fluid rounded-start"
+                  alt="..."
+                  style={{
+                    maxHeight: "65px",
+                    objectFit: "cover",
+                    width: "80px",
+                  }}
+                />
+              </div>
+              <div className="col-md-8">
+                <div className="card-body ">
+                  <h5 className="card-title ">Mix Diario 4</h5>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="row">
         <div className="col-12">
-          <h1 className="text-center mb-4">🎵 Sporifi - Tu Música Favorita</h1>
-          <p className="text-center text-muted mb-5">
-            Descubre y reproduce tu música favorita
-          </p>
+          <h4 className="text-start mt-3 "> Hecho para ti</h4>
+          <p className="text-start mb-5 ">Usuario</p>
         </div>
       </div>
 
@@ -29,10 +141,7 @@ export default function Home() {
                 className="card-img-top"
                 alt={`${track.title} cover`}
                 style={{ height: "200px", objectFit: "cover" }}
-                onError={(e) => {
-                  e.target.src =
-                    "https://via.placeholder.com/300x200/6c757d/ffffff?text=🎵";
-                }}
+                onError={(e) => {}}
               />
               <div className="card-body d-flex flex-column">
                 <h5 className="card-title text-truncate">{track.title}</h5>

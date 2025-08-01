@@ -24,11 +24,13 @@
   display: flex;
   align-items: center;
   margin-bottom: 2rem;
+  justify-content: flex-start; /* Asegura que los elementos estén alineados al inicio */
 }
+
 .sidebar-title {
   font-size: 1.5rem;
   font-weight: bold;
-  margin-left: 0.75rem;
+  margin-left: 1.25rem; /* Aumentamos el margen entre el icono y el título */
   color: #fff;
 }
 .sidebar-nav {

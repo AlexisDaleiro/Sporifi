@@ -84,7 +84,7 @@ export default function Player() {
 
   return (
     <div
-      className="player-container bg-dark text-white d-flex flex-wrap align-items-center justify-content-between px-2 px-md-4 py-2 py-md-3 shadow-lg rounded-5 "
+      className="player-container bg-dark text-white d-flex flex-wrap align-items-center justify-content-between px-2 px-md-4 py-2 py-md-3 shadow-lg  "
       style={{
         zIndex: 1050,
         width: "100%",

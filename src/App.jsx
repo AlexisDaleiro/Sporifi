@@ -5,12 +5,12 @@ import Home from "./pages/Home.jsx";
 import Playlist from "./pages/Playlist.jsx";
 import Search from "./pages/Search.jsx";
 import NotFound from "./pages/NotFound.jsx";
-
 import Buypremium from "./pages/Buypremium.jsx";
-
 import Condiciones from "./pages/Condiciones.jsx";
 import MainLayout from "./pages/MainLayout.jsx";
 import EmptyLayout from "./pages/EmptyLayout.jsx";
+import InstallApp from "./pages/InstallApp.jsx";
+
 import { useState } from "react";
 
 function App() {
@@ -25,6 +25,7 @@ function App() {
         <Route path="/premium/planes/individual" element={<Buypremium />} />
         <Route path="/premium/planes/duo" element={<Buypremium />} />
         <Route path="/premium/planes/familiar" element={<Buypremium />} />
+        <Route path="/installapp" element={<InstallApp />} />
       </Route>
       <Route element={<EmptyLayout />}>
         <Route path="/premium/condiciones" element={<Condiciones />} />
