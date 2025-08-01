@@ -32,8 +32,8 @@ export default function Navbar() {
                   <Link to={"/"}>
                     <img
                       className="img-fluid"
-                      style={{}}
-                      src="./src/assets/spotify-ar21.svg"
+                      style={{ width: "60px" }}
+                      src="./src/assets/icons8-spotify.svg"
                       alt="Your Company"
                     />
                   </Link>
@@ -95,14 +95,15 @@ export default function Navbar() {
                       Descubre premium
                     </button>
                   </Link>
-                  <button
-                    type="button"
-                    onClick={handleAction2}
-                    className="btn btn-secondary px-3 py-2 rounded-5"
-                  >
-                    Instalar App
-                  </button>
-
+                  <Link to={"/installapp"}>
+                    <button
+                      type="button"
+                      onClick={handleAction2}
+                      className="btn btn-secondary px-3 py-2 rounded-5"
+                    >
+                      Instalar App
+                    </button>
+                  </Link>
                   <button
                     type="button"
                     className="btn btn-link text-decoration-none p-1 rounded-circle"
