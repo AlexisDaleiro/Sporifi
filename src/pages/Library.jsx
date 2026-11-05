@@ -1,12 +1,14 @@
 import { Link, useNavigate } from "react-router-dom";
 import useLibraryStore from "../store/library";
+import EmptyState from "../components/EmptyState";
+import Icon from "../components/Icon";
 
 function LibraryCard({ to, title, count }) {
   return (
     <Link to={to} className="text-decoration-none">
       <div className="card h-100 bg-dark text-white shadow-sm hover-shadow">
         <div className="card-body">
-          <h5 className="card-title text-truncate">{title}</h5>
+          <h3 className="h5 card-title text-truncate">{title}</h3>
           <p className="card-text text-white-50 mb-0">
             {count} {count === 1 ? "canción" : "canciones"}
           </p>
@@ -32,7 +34,11 @@ export default function Library() {
       </div>
       <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3">
         <div className="col">
-          <LibraryCard to="/favorites" title="♥ Tus favoritos" count={favorites.length} />
+          <LibraryCard to="/favorites" title={
+              <>
+                <Icon name="heartFilled" size={18} /> Tus favoritos
+              </>
+            } count={favorites.length} />
         </div>
         {playlists.map((p) => (
           <div key={p.id} className="col">
@@ -41,9 +47,9 @@ export default function Library() {
         ))}
       </div>
       {playlists.length === 0 && (
-        <p className="text-muted mt-4">
-          Aún no tienes playlists. Crea una o usa el botón ＋ junto a cualquier canción.
-        </p>
+        <EmptyState icon="library" title="Aún no tienes playlists">
+          Crea una con el botón de arriba o usa el botón + junto a cualquier canción.
+        </EmptyState>
       )}
     </div>
   );

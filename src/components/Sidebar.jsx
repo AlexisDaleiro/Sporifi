@@ -1,5 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import useLibraryStore from "../store/library";
+import Icon from "./Icon";
 
 const linkClass = ({ isActive }) => `sidebar-link${isActive ? " active" : ""}`;
 
@@ -11,21 +12,21 @@ export default function Sidebar({ className }) {
   return (
     <aside className={className}>
       <div className="sidebar-header">
-        <img src="/logo.svg" width={30} height={30} alt="" />
+        <img src="/logo.svg" width={32} height={32} alt="" />
         <span className="sidebar-title">Sporifi</span>
       </div>
       <nav className="sidebar-nav" aria-label="Principal">
         <NavLink to="/" end className={linkClass}>
-          <span aria-hidden="true">🏠</span> Inicio
+          <Icon name="home" /> Inicio
         </NavLink>
         <NavLink to="/search" className={linkClass}>
-          <span aria-hidden="true">🔍</span> Buscar
+          <Icon name="search" /> Buscar
         </NavLink>
         <NavLink to="/library" end className={linkClass}>
-          <span aria-hidden="true">📚</span> Tu biblioteca
+          <Icon name="library" /> Tu biblioteca
         </NavLink>
         <NavLink to="/favorites" className={linkClass}>
-          <span aria-hidden="true">♥</span> Tus favoritos
+          <Icon name="heartFilled" /> Tus favoritos
         </NavLink>
       </nav>
       <div className="sidebar-actions">

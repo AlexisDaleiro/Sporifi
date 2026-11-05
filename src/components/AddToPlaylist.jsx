@@ -1,5 +1,6 @@
 import Dropdown from "react-bootstrap/Dropdown";
 import useLibraryStore from "../store/library";
+import Icon from "./Icon";
 
 export default function AddToPlaylist({ track }) {
   const playlists = useLibraryStore((s) => s.playlists);
@@ -8,12 +9,8 @@ export default function AddToPlaylist({ track }) {
 
   return (
     <Dropdown align="end">
-      <Dropdown.Toggle
-        variant="link"
-        className="p-0 fs-5 text-secondary text-decoration-none"
-        aria-label={`Agregar ${track.title} a una playlist`}
-      >
-        ＋
+      <Dropdown.Toggle variant="link" className="icon-btn" aria-label={`Agregar ${track.title} a una playlist`}>
+        <Icon name="plus" />
       </Dropdown.Toggle>
       <Dropdown.Menu popperConfig={{ strategy: "fixed" }}>
         {playlists.map((p) => {

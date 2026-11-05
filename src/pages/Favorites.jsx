@@ -1,5 +1,6 @@
 import useLibraryStore from "../store/library";
 import CollectionHeader from "../components/CollectionHeader";
+import EmptyState from "../components/EmptyState";
 import TrackList from "../components/TrackList";
 
 export default function Favorites() {
@@ -9,7 +10,9 @@ export default function Favorites() {
     <div className="container-fluid p-4 p-md-5">
       <CollectionHeader title="Tus favoritos" tracks={favorites} />
       {favorites.length === 0 ? (
-        <p className="text-muted">Marca canciones con el corazón y aparecerán aquí.</p>
+        <EmptyState icon="heart" title="Aún no tienes favoritos">
+          Marca canciones con el corazón y aparecerán aquí.
+        </EmptyState>
       ) : (
         <TrackList tracks={favorites} />
       )}

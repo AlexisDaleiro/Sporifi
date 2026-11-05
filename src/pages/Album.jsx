@@ -2,6 +2,7 @@ import { Link, useParams } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
 import { getAlbum } from "../services/jamendo";
 import Async from "../components/Async";
+import { PageSkeleton } from "../components/Skeletons";
 import CollectionHeader from "../components/CollectionHeader";
 import TrackList from "../components/TrackList";
 
@@ -11,7 +12,7 @@ export default function Album() {
 
   return (
     <div className="container-fluid p-4 p-md-5">
-      <Async loading={loading} error={error}>
+      <Async loading={loading} error={error} skeleton={<PageSkeleton />}>
         {!album ? (
           <p>Álbum no encontrado.</p>
         ) : (

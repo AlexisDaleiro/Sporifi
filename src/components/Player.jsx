@@ -4,6 +4,7 @@ import usePlayerStore, { selectCurrentTrack } from "../store/zustand";
 import useLibraryStore from "../store/library";
 import { nextPos } from "../store/queue";
 import formatTime from "../utils/formatTime";
+import Icon from "./Icon";
 
 const MAX_CONSECUTIVE_FAILURES = 3; // canciones rotas seguidas antes de parar
 const SEEK_STEP = 5; // segundos por flecha del teclado
@@ -180,10 +181,7 @@ export default function Player() {
   const loading = isPlaying && status === "loading";
 
   return (
-    <div
-      className="player-container bg-dark text-white d-flex flex-wrap align-items-center justify-content-between px-2 px-md-4 py-2 py-md-3 shadow-lg"
-      style={{ zIndex: 1050, width: "100%", left: 0, bottom: 0, position: "fixed" }}
-    >
+    <div className="player-container" role="region" aria-label="Reproductor">
       <audio
         ref={audioRef}
         src={src ?? undefined}
@@ -210,120 +208,106 @@ export default function Player() {
         onError={() => track && fail(track)}
       />
 
-      {/* Canción actual */}
-      <div className="d-flex align-items-center flex-shrink-0" style={{ minWidth: 0 }}>
+      <div className="player-info">
         <img
           src={track?.cover ?? DEFAULT_COVER}
           alt=""
-          className="rounded me-2 me-md-3"
-          style={{ width: "40px", height: "40px", objectFit: "cover" }}
+          className="player-cover"
           onError={(e) => {
             if (!e.currentTarget.src.endsWith(DEFAULT_COVER)) e.currentTarget.src = DEFAULT_COVER;
           }}
         />
-        <div className="text-truncate" style={{ maxWidth: 160 }}>
+        <div className="text-truncate">
           <div className="fw-semibold text-truncate">{track ? track.title : "Elige una canción"}</div>
-          <div className="small text-white-50 text-truncate">
-            {track && (
-              <Link to={`/artist/${track.artistId}`} className="text-white-50 text-decoration-none">
-                {track.artistName}
-              </Link>
-            )}
-          </div>
+          {message ? (
+            <div className="small text-warning text-truncate" role="status">
+              {message}
+            </div>
+          ) : (
+            track && (
+              <div className="small text-truncate">
+                <Link to={`/artist/${track.artistId}`} className="text-muted text-decoration-none">
+                  {track.artistName}
+                </Link>
+              </div>
+            )
+          )}
         </div>
       </div>
 
-      {/* Controles y progreso */}
-      <div className="d-flex flex-column align-items-center flex-grow-1 mx-2 mx-md-4" style={{ minWidth: 0 }}>
-        <div className="d-flex align-items-center gap-2 mb-1">
-          <button
-            onClick={toggleShuffle}
-            className={`btn btn-sm rounded-circle ${shuffle ? "btn-light" : "btn-outline-light"}`}
-            style={{ width: "32px", height: "32px" }}
-            aria-label="Aleatorio"
-            aria-pressed={shuffle}
-            title="Aleatorio"
-          >
-            🔀
-          </button>
-          <button
-            onClick={() => goPrev(audioRef.current)}
-            className="btn btn-outline-light btn-sm rounded-circle"
-            style={{ width: "32px", height: "32px" }}
-            disabled={!track}
-            aria-label="Anterior"
-          >
-            ⏮
-          </button>
-          <button
-            onClick={togglePlay}
-            className="btn btn-primary rounded-circle d-flex align-items-center justify-content-center"
-            style={{ width: "40px", height: "40px" }}
-            disabled={!track}
-            aria-label={isPlaying ? "Pausar" : "Reproducir"}
-          >
-            {loading ? (
-              <span className="spinner-border spinner-border-sm" role="status" aria-label="Cargando" />
-            ) : isPlaying ? (
-              "⏸"
-            ) : (
-              "▶"
-            )}
-          </button>
-          <button
-            onClick={() => goNext(audioRef.current)}
-            className="btn btn-outline-light btn-sm rounded-circle"
-            style={{ width: "32px", height: "32px" }}
-            disabled={!track || !canNext}
-            aria-label="Siguiente"
-          >
-            ⏭
-          </button>
-          <button
-            onClick={cycleRepeat}
-            className={`btn btn-sm rounded-circle ${repeat === "off" ? "btn-outline-light" : "btn-light"}`}
-            style={{ width: "32px", height: "32px" }}
-            aria-label={REPEAT_LABELS[repeat]}
-            aria-pressed={repeat !== "off"}
-            title={REPEAT_LABELS[repeat]}
-          >
-            {repeat === "one" ? "🔂" : "🔁"}
-          </button>
-        </div>
-
-        {message && (
-          <div className="text-warning small" role="status">
-            {message}
-          </div>
-        )}
-
-        <div className="d-flex align-items-center gap-1 gap-md-2 w-100 mt-1">
-          <span className="small text-white-50">{formatTime(time)}</span>
-          <input
-            type="range"
-            className="form-range flex-grow-1"
-            min={0}
-            max={duration || 0}
-            step={0.1}
-            value={Math.min(time, duration || 0)}
-            onChange={handleSeek}
-            disabled={!track || !duration}
-            aria-label="Progreso de la canción"
-          />
-          <span className="small text-white-50">{formatTime(duration)}</span>
-        </div>
-      </div>
-
-      {/* Volumen */}
-      <div className="d-flex align-items-center gap-2 gap-md-3 flex-shrink-0">
+      <div className="player-controls">
         <button
+          type="button"
+          className="icon-btn d-none d-md-inline-flex"
+          onClick={toggleShuffle}
+          aria-label="Aleatorio"
+          aria-pressed={shuffle}
+          title="Aleatorio"
+        >
+          <Icon name="shuffle" />
+        </button>
+        <button type="button" className="icon-btn" onClick={() => goPrev(audioRef.current)} disabled={!track} aria-label="Anterior">
+          <Icon name="prev" size={24} />
+        </button>
+        <button
+          type="button"
+          className="play-btn"
+          onClick={togglePlay}
+          disabled={!track}
+          aria-label={isPlaying ? "Pausar" : "Reproducir"}
+        >
+          {loading ? (
+            <span className="spinner-border spinner-border-sm" role="status" aria-label="Cargando" />
+          ) : (
+            <Icon name={isPlaying ? "pause" : "play"} size={24} />
+          )}
+        </button>
+        <button
+          type="button"
+          className="icon-btn"
+          onClick={() => goNext(audioRef.current)}
+          disabled={!track || !canNext}
+          aria-label="Siguiente"
+        >
+          <Icon name="next" size={24} />
+        </button>
+        <button
+          type="button"
+          className="icon-btn d-none d-md-inline-flex"
+          onClick={cycleRepeat}
+          aria-label={REPEAT_LABELS[repeat]}
+          aria-pressed={repeat !== "off"}
+          title={REPEAT_LABELS[repeat]}
+        >
+          <Icon name={repeat === "one" ? "repeatOne" : "repeat"} />
+        </button>
+      </div>
+
+      <div className="player-progress">
+        <span>{formatTime(time)}</span>
+        <input
+          type="range"
+          className="form-range flex-grow-1"
+          min={0}
+          max={duration || 0}
+          step={0.1}
+          value={Math.min(time, duration || 0)}
+          onChange={handleSeek}
+          disabled={!track || !duration}
+          aria-label="Progreso de la canción"
+        />
+        <span>{formatTime(duration)}</span>
+      </div>
+
+      <div className="player-volume d-none d-md-flex">
+        <button
+          type="button"
+          className="icon-btn"
           onClick={toggleMute}
-          className="btn btn-link text-decoration-none p-0 btn-player"
-          style={{ color: "inherit" }}
           aria-label={muted ? "Activar sonido" : "Silenciar"}
           aria-pressed={muted}
         >
-          {muted || volume === 0 ? "🔇" : "🔊"}
+          <Icon name={muted || volume === 0 ? "mute" : "volume"} />
         </button>
         <input
           type="range"
@@ -333,7 +317,7 @@ export default function Player() {
           value={muted ? 0 : volume}
           onChange={(e) => setVolume(Number(e.target.value))}
           className="form-range"
-          style={{ width: "72px", maxWidth: "20vw" }}
+          style={{ width: 96 }}
           aria-label="Volumen"
         />
       </div>

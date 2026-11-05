@@ -33,7 +33,16 @@ Revisión hecha el 2026-11-04 sobre `main` (último commit `638c41c`, 2025-08-01
   - **Decisiones:** las playlists son locales (las públicas de Jamendo no se usan: `getPlaylist` y `getTrack` se borraron del servicio). `Condiciones` pasó al layout principal porque con un layout sin player la música se cortaba al entrar (`EmptyLayout` eliminado). Instalar app explica cómo crear un acceso directo; no hay PWA.
   - Se borraron `PIndividual.jsx` y `tarjetas.png` (imagen de tarjetas de pago).
   - Pendiente de la Fase 5: en pantallas chicas el sidebar sigue ocupando espacio y el tema oscuro/claro está mezclado.
-- **Fase 5 en adelante:** sin empezar.
+- **Fase 5 — hecha y verificada en el navegador y con Lighthouse** (2026-11-05):
+  - **Tema:** oscuro nativo de Bootstrap (`data-bs-theme="dark"`) con variables CSS propias (`--sp-*`) en un solo `src/index.css` (se borró `App.css`). Acento verde con texto negro (contraste). Se fueron el azul, el naranja y las tarjetas blancas.
+  - **Layout:** grilla (sidebar fijo de 240 px | contenido), barra superior pegajosa; el botón de colapsar que tapaba el logo y la superposición de 20 px del sidebar desaparecieron. En móvil el sidebar se oculta y el menú de la barra superior trae enlaces, playlists y "Crear playlist". Sin scroll horizontal.
+  - **Player:** grilla (info | controles + progreso | volumen); en móvil queda compacto (anterior, play, siguiente y progreso; aleatorio, repetir y volumen se ocultan). El aviso de error ahora reemplaza la línea del artista.
+  - **Iconos:** SVG propios (`src/components/Icon.jsx`) en lugar de emojis.
+  - **Carga y vacíos:** skeletons con la forma del contenido (`Skeletons.jsx`) y `EmptyState`.
+  - **Rutas con lazy loading:** el bundle principal bajó de 363 a 284 kB; layout y player siguen montados al cambiar de página.
+  - **Accesibilidad:** enlace "Saltar al contenido", `main` con landmark, foco visible, `prefers-reduced-motion`, orden de encabezados corregido, `robots.txt`. Lighthouse: Accesibilidad 100, Prácticas recomendadas 100 y SEO 100 en Home, artista, Premium y búsqueda (móvil y escritorio). Queda "agentic browsing" en 67 por `llms.txt` (opcional, no aplica).
+  - Los chips de género y la barra de búsqueda ya eran funcionales (Fase 4).
+- **Fase 6 en adelante:** sin empezar (los tests unitarios ya existen: falta un smoke test de rutas y la CI).
 
 *La sección 1 de abajo es el diagnóstico original, antes de las Fases 0 y 1.*
 

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import useLibraryStore from "../store/library";
 import CollectionHeader from "../components/CollectionHeader";
+import EmptyState from "../components/EmptyState";
 import TrackList from "../components/TrackList";
 
 export default function Playlist() {
@@ -68,7 +69,9 @@ export default function Playlist() {
         )}
       </CollectionHeader>
       {playlist.tracks.length === 0 ? (
-        <p className="text-muted">Esta playlist está vacía. Agrega canciones con el botón ＋ de cualquier lista.</p>
+        <EmptyState title="Esta playlist está vacía">
+          Agrega canciones con el botón + de cualquier lista.
+        </EmptyState>
       ) : (
         <TrackList tracks={playlist.tracks} onRemove={(track) => removeFromPlaylist(id, track.id)} />
       )}

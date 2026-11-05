@@ -1,17 +1,19 @@
+import { lazy } from "react";
 import { Route, Routes } from "react-router-dom";
-import "./App.css";
-import Album from "./pages/Album.jsx";
-import Artist from "./pages/Artist.jsx";
-import Buypremium from "./pages/Buypremium.jsx";
-import Condiciones from "./pages/Condiciones.jsx";
-import Favorites from "./pages/Favorites.jsx";
-import Home from "./pages/Home.jsx";
-import InstallApp from "./pages/InstallApp.jsx";
-import Library from "./pages/Library.jsx";
 import MainLayout from "./pages/MainLayout.jsx";
-import NotFound from "./pages/NotFound.jsx";
-import Playlist from "./pages/Playlist.jsx";
-import Search from "./pages/Search.jsx";
+
+// Cada página se carga cuando se visita (el layout y el player quedan siempre montados).
+const Album = lazy(() => import("./pages/Album.jsx"));
+const Artist = lazy(() => import("./pages/Artist.jsx"));
+const Buypremium = lazy(() => import("./pages/Buypremium.jsx"));
+const Condiciones = lazy(() => import("./pages/Condiciones.jsx"));
+const Favorites = lazy(() => import("./pages/Favorites.jsx"));
+const Home = lazy(() => import("./pages/Home.jsx"));
+const InstallApp = lazy(() => import("./pages/InstallApp.jsx"));
+const Library = lazy(() => import("./pages/Library.jsx"));
+const NotFound = lazy(() => import("./pages/NotFound.jsx"));
+const Playlist = lazy(() => import("./pages/Playlist.jsx"));
+const Search = lazy(() => import("./pages/Search.jsx"));
 
 function App() {
   return (

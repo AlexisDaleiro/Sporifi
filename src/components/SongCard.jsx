@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import FavoriteButton from "./FavoriteButton";
+import Icon from "./Icon";
 
 export default function SongCard({ track, active, onPlay }) {
   return (
@@ -13,7 +14,7 @@ export default function SongCard({ track, active, onPlay }) {
       />
       <div className="card-body d-flex flex-column">
         <div className="d-flex justify-content-between align-items-start gap-2">
-          <h5 className="card-title text-truncate mb-1">{track.title}</h5>
+          <h3 className="h5 card-title text-truncate mb-1">{track.title}</h3>
           <FavoriteButton track={track} />
         </div>
         {track.artistId ? (
@@ -23,8 +24,8 @@ export default function SongCard({ track, active, onPlay }) {
         ) : (
           <p className="card-text text-muted mb-3">{track.artistName}</p>
         )}
-        <button className="btn btn-primary mt-auto" onClick={onPlay}>
-          <span className="me-2">{active ? "⏸" : "▶"}</span>
+        <button className="btn btn-primary mt-auto d-flex align-items-center justify-content-center gap-2" onClick={onPlay}>
+          <Icon name={active ? "pause" : "play"} />
           {active ? "Pausar" : "Reproducir"}
         </button>
       </div>

@@ -9,7 +9,7 @@ export default function Buypremium() {
 
   return (
     <div className="container-fluid p-0">
-      <div className="gradientBg text-center text-white py-5 px-3">
+      <div className="hero text-center text-white py-5 px-3">
         <h2>Exprime al máximo tu música con Sporifi Premium</h2>
         <p className="mb-1">Elige el plan que mejor se adapte a ti. Cancela cuando quieras.</p>
         <p className="small mb-3">

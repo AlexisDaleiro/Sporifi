@@ -4,6 +4,8 @@ import usePlayback from "../hooks/usePlayback";
 import useLibraryStore from "../store/library";
 import { getPopularAlbums, getPopularArtists, getPopularTracks } from "../services/jamendo";
 import Async from "../components/Async";
+import EmptyState from "../components/EmptyState";
+import { CardsSkeleton, TilesSkeleton } from "../components/Skeletons";
 import SongCard from "../components/SongCard";
 import { AlbumCard, ArtistCard } from "../components/MediaCards";
 
@@ -45,13 +47,13 @@ export default function Home() {
     <div className="container-fluid p-4 p-md-5">
       {recent.length > 0 && (
         <section className="mb-5">
-          <h4 className="mb-3">Escuchado recientemente</h4>
+          <h2 className="h4 mb-3">Escuchado recientemente</h2>
           <SongGrid tracks={recent.slice(0, RECENT_SHOWN)} playback={recentPlayback} />
         </section>
       )}
 
       <section className="mb-5">
-        <h4 className="mb-3">Canciones populares</h4>
+        <h2 className="h4 mb-3">Canciones populares</h2>
         <div className="d-flex flex-wrap gap-2 mb-3" role="group" aria-label="Género">
           {GENRES.map(([label, value]) => (
             <button
@@ -64,18 +66,18 @@ export default function Home() {
             </button>
           ))}
         </div>
-        <Async loading={popular.loading} error={popular.error}>
+        <Async loading={popular.loading} error={popular.error} skeleton={<CardsSkeleton count={8} />}>
           {popular.data?.length ? (
             <SongGrid tracks={popular.data} playback={popularPlayback} />
           ) : (
-            <p className="text-muted">No hay canciones para este género.</p>
+            <EmptyState title="No hay canciones para este género" />
           )}
         </Async>
       </section>
 
       <section className="mb-5">
-        <h4 className="mb-3">Artistas populares</h4>
-        <Async loading={artists.loading} error={artists.error}>
+        <h2 className="h4 mb-3">Artistas populares</h2>
+        <Async loading={artists.loading} error={artists.error} skeleton={<TilesSkeleton round />}>
           <div className="row row-cols-2 row-cols-md-4 row-cols-xl-6 g-3">
             {artists.data?.map((artist) => (
               <div key={artist.id} className="col">
@@ -87,8 +89,8 @@ export default function Home() {
       </section>
 
       <section className="mb-5">
-        <h4 className="mb-3">Álbumes populares</h4>
-        <Async loading={albums.loading} error={albums.error}>
+        <h2 className="h4 mb-3">Álbumes populares</h2>
+        <Async loading={albums.loading} error={albums.error} skeleton={<TilesSkeleton />}>
           <div className="row row-cols-2 row-cols-md-4 row-cols-xl-6 g-3">
             {albums.data?.map((album) => (
               <div key={album.id} className="col">
