@@ -1,12 +1,13 @@
 import { useParams } from "react-router-dom";
-import usePlayerStore from "../store/zustand";
+import usePlayerStore, { selectCurrentTrack } from "../store/zustand";
 import useFetch from "../hooks/useFetch";
 import formatTime from "../utils/formatTime";
 import { getArtist, getArtistTracks } from "../services/jamendo";
 
 export default function Artist() {
   const { id } = useParams();
-  const { setMusicList, setTrack, currentTrack, isPlaying } = usePlayerStore();
+  const { playQueue, togglePlay, isPlaying } = usePlayerStore();
+  const current = usePlayerStore(selectCurrentTrack);
   const { data, loading, error } = useFetch(
     () => Promise.all([getArtist(id), getArtistTracks(id)]),
     [id]
@@ -18,9 +19,10 @@ export default function Artist() {
   const [artist, tracks] = data;
   if (!artist) return <p className="p-5">Artista no encontrado.</p>;
 
+  // La cola pasa a ser la lista del artista; si ya es la actual, alterna play/pausa.
   const play = (index) => {
-    setMusicList(tracks);
-    setTrack(tracks[index]);
+    if (current?.id === tracks[index].id) togglePlay();
+    else playQueue(tracks, index);
   };
 
   return (
@@ -47,14 +49,13 @@ export default function Artist() {
           {tracks.length === 0 && <p>Este artista no tiene canciones disponibles.</p>}
           <ul className="list-group">
             {tracks.map((track, i) => {
-              const active = currentTrack === track.src && isPlaying;
+              const active = current?.id === track.id && isPlaying;
               return (
                 <li key={track.id} className="list-group-item d-flex align-items-center gap-3">
                   <button
                     className="btn btn-primary btn-sm"
                     onClick={() => play(i)}
-                    disabled={active}
-                    aria-label={`Reproducir ${track.title}`}
+                    aria-label={`${active ? "Pausar" : "Reproducir"} ${track.title}`}
                   >
                     {active ? "⏸" : "▶"}
                   </button>

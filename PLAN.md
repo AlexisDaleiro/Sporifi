@@ -17,7 +17,11 @@ Revisión hecha el 2026-11-04 sobre `main` (último commit `638c41c`, 2025-08-01
     - Algunos tracks puntuales dan 404 en el audio (ej. `2034080`, el primero de populares): el player de la Fase 3 **debe saltar al siguiente** cuando un track falla.
     - `playlists` expone emails de usuarios en `user_name`: no se muestra.
     - El `client_id` de prueba de la documentación está suspendido; se usa el propio en `.env.local`.
-- **Fase 3 en adelante:** sin empezar.
+- **Fase 3 — hecha y verificada en el navegador** (2026-11-05): `<audio>` nativo controlado por el store (`react-howler` eliminado). Cola con `queue`/`order`/`pos` (`src/store/queue.js` + `src/store/zustand.js`), `playQueue`, next/prev (anterior reinicia si pasaron más de 3 s), shuffle que conserva la canción actual, repeat off/all/one, mute, barra de progreso arrastrable (`<input type="range">`), estado de carga con spinner, salto automático al siguiente si una canción falla (máx. 3 seguidas), Media Session (teclas multimedia y metadata), atajos (espacio y flechas ±5 s) y `persist` de cola, volumen, shuffle y repeat. 17 tests (`npm test`).
+  - Verificado: next/prev, seek, mute, volumen, repeat (incluido `loop`), shuffle, fin de canción, canción rota (salta en ~1 s con aviso), recarga (restaura pausado y reproduce al dar play), Home y Artist usando la cola.
+  - Hallazgo: Jamendo no valida el token `from=` de las URLs de audio (se reprodujo con un token inválido), así que no se renuevan URLs. Si algún día caducan, se resuelve con `getTrack` al fallar.
+  - Pendiente menor: no hay vista de la cola ni arrastrar para reordenar (no estaba en el plan).
+- **Fase 4 en adelante:** sin empezar.
 
 *La sección 1 de abajo es el diagnóstico original, antes de las Fases 0 y 1.*
 

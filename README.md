@@ -19,6 +19,10 @@ Otros scripts: `npm run lint`, `npm run build`, `npm run preview`.
 
 Copiar `.env.example` a `.env.local` y completar `VITE_JAMENDO_CLIENT_ID` con el `client_id` gratuito de Jamendo. *(Se usa a partir de la Fase 2 del plan.)*
 
+## Atajos de teclado
+
+`Espacio` play/pausa · `←` / `→` retroceder / avanzar 5 s. También responde a las teclas multimedia del sistema.
+
 ## Estado
 
 Ver [PLAN.md](PLAN.md) para el diagnóstico y las fases pendientes.

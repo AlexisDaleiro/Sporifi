@@ -1,21 +1,17 @@
-import React from "react";
-import usePlayerStore from "../store/zustand";
-import { useEffect } from "react";
+import usePlayerStore, { selectCurrentTrack } from "../store/zustand";
 import { Link } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
 import { getPopularTracks } from "../services/jamendo";
 
 export default function Home() {
-  const { setMusicList, setTrack, currentTrack, isPlaying } = usePlayerStore();
+  const { playQueue, togglePlay, isPlaying } = usePlayerStore();
+  const current = usePlayerStore(selectCurrentTrack);
   const { data: tracks, loading, error } = useFetch(() => getPopularTracks({ limit: 20 }), []);
 
-  // La cola del player pasa a ser la lista visible (next/prev recorren esta lista).
-  useEffect(() => {
-    if (tracks) setMusicList(tracks);
-  }, [tracks, setMusicList]);
-
-  const handlePlayTrack = (track) => {
-    setTrack(track);
+  // La cola del player pasa a ser la lista visible; si ya es la actual, alterna play/pausa.
+  const handlePlay = (track, index) => {
+    if (current?.id === track.id) togglePlay();
+    else playQueue(tracks, index);
   };
 
   return (
@@ -144,7 +140,7 @@ export default function Home() {
       {error && <p className="text-danger">No se pudieron cargar las canciones: {error.message}</p>}
 
       <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
-        {(tracks ?? []).map((track) => (
+        {(tracks ?? []).map((track, index) => (
           <div key={track.id} className="col">
             <div className="card h-100 shadow-sm hover-shadow">
               <img
@@ -160,13 +156,12 @@ export default function Home() {
                 </Link>
                 <button
                   className="btn btn-primary mt-auto"
-                  onClick={() => handlePlayTrack(track)}
-                  disabled={currentTrack === track.src && isPlaying}
+                  onClick={() => handlePlay(track, index)}
                 >
-                  {currentTrack === track.src && isPlaying ? (
+                  {current?.id === track.id && isPlaying ? (
                     <>
                       <span className="me-2">⏸</span>
-                      Reproduciendo
+                      Pausar
                     </>
                   ) : (
                     <>
