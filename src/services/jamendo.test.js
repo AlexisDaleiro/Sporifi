@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { request, normalizeTrack, JamendoError } from "./jamendo.js";
+import { request, requestNonEmpty, normalizeTrack, JamendoError } from "./jamendo.js";
 
 const reply = (body) => async () => ({ ok: true, json: async () => body });
 
@@ -37,4 +37,25 @@ test("request devuelve results cuando status es success", async () => {
 
 test("request sin client_id falla con mensaje claro", async () => {
   await assert.rejects(request("tracks", {}, ""), /VITE_JAMENDO_CLIENT_ID/);
+});
+
+test("requestNonEmpty reintenta cuando results viene vacío y corta al primer dato", async () => {
+  const bodies = [[], [], [{ id: 1 }], [{ id: 2 }]];
+  let calls = 0;
+  globalThis.fetch = async () => ({
+    ok: true,
+    json: async () => ({ headers: { status: "success", code: 0 }, results: bodies[calls++] }),
+  });
+  assert.deepEqual(await requestNonEmpty("tracks", {}, "id"), [{ id: 1 }]);
+  assert.equal(calls, 3);
+});
+
+test("requestNonEmpty se rinde tras `attempts` intentos y devuelve []", async () => {
+  let calls = 0;
+  globalThis.fetch = async () => ({
+    ok: true,
+    json: async () => ({ headers: { status: "success", code: 0 }, results: (calls++, []) }),
+  });
+  assert.deepEqual(await requestNonEmpty("tracks", {}, "id", 3), []);
+  assert.equal(calls, 3);
 });

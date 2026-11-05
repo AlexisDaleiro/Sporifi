@@ -123,6 +123,7 @@ export default function Player() {
       >
         {currentTrack && (
           <ReactHowler
+            html5 // Jamendo no envía CORS: Web Audio (XHR) falla, <audio> funciona
             src={currentTrack}
             playing={isPlaying}
             volume={volume}

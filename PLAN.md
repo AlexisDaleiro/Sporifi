@@ -8,9 +8,15 @@ Revisión hecha el 2026-11-04 sobre `main` (último commit `638c41c`, 2025-08-01
   - Queda para la Fase 2: borrar las portadas de `src/assets/` junto con el catálogo local del store (todavía las usa).
 - **Fase 1 — hecha salvo lo marcado:** lint sin errores, Redux y `react-redux` fuera, archivos muertos borrados, `index.html` corregido, `<style>` inline movidos a `App.css`, dependencias actualizadas dentro de su rango.
   - Pendiente: `react-howler` (sale en Fase 3) y evaluar majors (Vite 8, ESLint 10, plugin-react 6, react-hooks 7).
-- **Fase 2 — hecha, falta verificar contra la API real** (2026-11-05): `src/services/jamendo.js` (`request`, normalizadores, `getPopularTracks`, `searchTracks`, `getTrack`, `getArtist`, `getArtistTracks`, `getAlbum`, `getPlaylist`), `src/hooks/useFetch.js`, `npm test` (node:test, 5 tests de la capa de datos). Home y Artist ya leen de Jamendo; catálogo local, portadas viejas, `axios` y MusicBrainz eliminados; crédito "Música vía Jamendo" en el sidebar.
-  - **Sin verificar:** el `client_id` de prueba de la documentación está suspendido (código 11), así que las formas de respuesta reales (`position`, tracks anidados de `playlists/tracks`, orden `popularity_week`) siguen sin comprobar. Verificar con `.env.local` propio antes de la Fase 3.
-  - Confirmado: Jamendo responde HTTP 200 aunque falle (el error va en `headers.status`) y permite CORS desde el navegador (`access-control-allow-origin: *`).
+- **Fase 2 — hecha y verificada contra la API real** (2026-11-05): `src/services/jamendo.js`, `src/hooks/useFetch.js`, `npm test` (node:test, 7 tests). Home y Artist leen de Jamendo y se comprobó en el navegador: 20 canciones, reproducción real (el contador avanza) y página de artista con 50 canciones. Catálogo local, portadas viejas, `axios` y MusicBrainz eliminados; crédito "Música vía Jamendo" en el sidebar.
+  - **Hallazgos de la API (verificados):**
+    - `/tracks` con filtros u orden devuelve `[]` con `status: success` entre 30% y 55% de las veces → `requestNonEmpty` reintenta hasta 5 veces. `/artists`, `/albums` y los anidados (`albums/tracks`, `playlists/tracks`) son estables.
+    - `artists/tracks` devuelve todo el catálogo por id (hasta 350 KB) e ignora `limit`/`order`: no se usa.
+    - `albums/tracks` devuelve los tracks desordenados: se ordena por `position`.
+    - El audio (`storage.jamendo.com`) no envía CORS: `<audio>` funciona, `fetch`/XHR no. Por eso `react-howler` va con `html5`.
+    - Algunos tracks puntuales dan 404 en el audio (ej. `2034080`, el primero de populares): el player de la Fase 3 **debe saltar al siguiente** cuando un track falla.
+    - `playlists` expone emails de usuarios en `user_name`: no se muestra.
+    - El `client_id` de prueba de la documentación está suspendido; se usa el propio en `.env.local`.
 - **Fase 3 en adelante:** sin empezar.
 
 *La sección 1 de abajo es el diagnóstico original, antes de las Fases 0 y 1.*

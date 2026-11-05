@@ -61,18 +61,29 @@ export function normalizeAlbum(a) {
   };
 }
 
+// Verificado 2026-11-05: /tracks con filtros u orden devuelve [] con status "success"
+// entre ~30% y ~55% de las veces. Se reintenta; una lista vacía legítima gasta `attempts` pedidos.
+// ponytail: reintento inmediato y sin backoff. Quitar si Jamendo lo corrige.
+export async function requestNonEmpty(path, params, clientId, attempts = 5) {
+  let results = [];
+  for (let i = 0; i < attempts && results.length === 0; i++) {
+    results = await request(path, params, clientId);
+  }
+  return results;
+}
+
 const toTracks = (results, d) => results.map((t) => normalizeTrack(t, d));
 
 export async function getPopularTracks({ limit = 20, offset = 0, order = "popularity_week" } = {}) {
-  return toTracks(await request("tracks", { ...TRACK_PARAMS, order, limit, offset }));
+  return toTracks(await requestNonEmpty("tracks", { ...TRACK_PARAMS, order, limit, offset }));
 }
 
 export async function searchTracks(query, { limit = 20, offset = 0 } = {}) {
-  return toTracks(await request("tracks", { ...TRACK_PARAMS, search: query, limit, offset }));
+  return toTracks(await requestNonEmpty("tracks", { ...TRACK_PARAMS, search: query, limit, offset }));
 }
 
 export async function getTrack(id) {
-  const [t] = await request("tracks", { ...TRACK_PARAMS, id });
+  const [t] = await requestNonEmpty("tracks", { ...TRACK_PARAMS, id });
   return t ? normalizeTrack(t) : null;
 }
 
@@ -81,25 +92,25 @@ export async function getArtist(id) {
   return a ? normalizeArtist(a) : null;
 }
 
+// No usar artists/tracks: devuelve todo el catálogo por id (hasta 350 KB) e ignora limit/order.
 export async function getArtistTracks(id, { limit = 50 } = {}) {
   return toTracks(
-    await request("tracks", { ...TRACK_PARAMS, artist_id: id, order: "popularity_total", limit })
+    await requestNonEmpty("tracks", { ...TRACK_PARAMS, artist_id: id, order: "popularity_total", limit })
   );
 }
 
-// ponytail: orden por id (≈ orden de subida), no por `position`. Cambiar a /albums/tracks si importa.
+// albums/tracks es estable pero devuelve los tracks desordenados: se ordena por `position`.
 export async function getAlbum(id) {
-  const [[a], tracks] = await Promise.all([
-    request("albums", { id, imagesize: 300 }),
-    request("tracks", { ...TRACK_PARAMS, album_id: id, order: "id_asc", limit: 200 }),
-  ]);
+  const [a] = await request("albums/tracks", { id, ...TRACK_PARAMS });
   if (!a) return null;
   const album = normalizeAlbum(a);
+  const tracks = [...(a.tracks || [])].sort((x, y) => Number(x.position) - Number(y.position));
   return { ...album, tracks: toTracks(tracks, album) };
 }
 
+// No se expone `user_name`: en playlists públicas suele ser el email del autor.
 export async function getPlaylist(id) {
   const [p] = await request("playlists/tracks", { id, imagesize: 300 });
   if (!p) return null;
-  return { id: String(p.id), name: p.name, userName: p.user_name || "", tracks: toTracks(p.tracks || []) };
+  return { id: String(p.id), name: p.name, tracks: toTracks(p.tracks || []) };
 }
