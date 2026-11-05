@@ -35,6 +35,12 @@ export default function Sidebar({ className }) {
         <button className="sidebar-btn">Crear Playlist</button>
         <button className="sidebar-btn">Tus Favoritos</button>
       </div>
+      <p className="sidebar-credit">
+        Música vía{" "}
+        <a href="https://www.jamendo.com" target="_blank" rel="noreferrer">
+          Jamendo
+        </a>
+      </p>
     </aside>
   );
 }

@@ -8,7 +8,10 @@ Revisión hecha el 2026-11-04 sobre `main` (último commit `638c41c`, 2025-08-01
   - Queda para la Fase 2: borrar las portadas de `src/assets/` junto con el catálogo local del store (todavía las usa).
 - **Fase 1 — hecha salvo lo marcado:** lint sin errores, Redux y `react-redux` fuera, archivos muertos borrados, `index.html` corregido, `<style>` inline movidos a `App.css`, dependencias actualizadas dentro de su rango.
   - Pendiente: `react-howler` (sale en Fase 3) y evaluar majors (Vite 8, ESLint 10, plugin-react 6, react-hooks 7).
-- **Fase 2 en adelante:** sin empezar.
+- **Fase 2 — hecha, falta verificar contra la API real** (2026-11-05): `src/services/jamendo.js` (`request`, normalizadores, `getPopularTracks`, `searchTracks`, `getTrack`, `getArtist`, `getArtistTracks`, `getAlbum`, `getPlaylist`), `src/hooks/useFetch.js`, `npm test` (node:test, 5 tests de la capa de datos). Home y Artist ya leen de Jamendo; catálogo local, portadas viejas, `axios` y MusicBrainz eliminados; crédito "Música vía Jamendo" en el sidebar.
+  - **Sin verificar:** el `client_id` de prueba de la documentación está suspendido (código 11), así que las formas de respuesta reales (`position`, tracks anidados de `playlists/tracks`, orden `popularity_week`) siguen sin comprobar. Verificar con `.env.local` propio antes de la Fase 3.
+  - Confirmado: Jamendo responde HTTP 200 aunque falle (el error va en `headers.status`) y permite CORS desde el navegador (`access-control-allow-origin: *`).
+- **Fase 3 en adelante:** sin empezar.
 
 *La sección 1 de abajo es el diagnóstico original, antes de las Fases 0 y 1.*
 

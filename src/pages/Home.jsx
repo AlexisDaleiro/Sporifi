@@ -1,9 +1,18 @@
 import React from "react";
 import usePlayerStore from "../store/zustand";
-import { Link, Links } from "react-router-dom";
+import { useEffect } from "react";
+import { Link } from "react-router-dom";
+import useFetch from "../hooks/useFetch";
+import { getPopularTracks } from "../services/jamendo";
 
 export default function Home() {
-  const { musicList, setTrack, currentTrack, isPlaying } = usePlayerStore();
+  const { setMusicList, setTrack, currentTrack, isPlaying } = usePlayerStore();
+  const { data: tracks, loading, error } = useFetch(() => getPopularTracks({ limit: 20 }), []);
+
+  // La cola del player pasa a ser la lista visible (next/prev recorren esta lista).
+  useEffect(() => {
+    if (tracks) setMusicList(tracks);
+  }, [tracks, setMusicList]);
 
   const handlePlayTrack = (track) => {
     setTrack(track);
@@ -131,10 +140,12 @@ export default function Home() {
           <p className="text-start mb-5 ">Usuario</p>
         </div>
       </div>
+      {loading && <p>Cargando canciones...</p>}
+      {error && <p className="text-danger">No se pudieron cargar las canciones: {error.message}</p>}
 
       <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
-        {musicList.map((track, index) => (
-          <div key={index} className="col">
+        {(tracks ?? []).map((track) => (
+          <div key={track.id} className="col">
             <div className="card h-100 shadow-sm hover-shadow">
               <img
                 src={track.cover}
@@ -144,8 +155,8 @@ export default function Home() {
               />
               <div className="card-body d-flex flex-column">
                 <h5 className="card-title text-truncate">{track.title}</h5>
-                <Link to={`/artist/${track.artist}`}>
-                  <p className="card-text text-muted">{track.artist}</p>
+                <Link to={`/artist/${track.artistId}`}>
+                  <p className="card-text text-muted">{track.artistName}</p>
                 </Link>
                 <button
                   className="btn btn-primary mt-auto"

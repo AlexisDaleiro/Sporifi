@@ -1,63 +1,72 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import usePlayerStore from "../store/zustand";
+import useFetch from "../hooks/useFetch";
+import formatTime from "../utils/formatTime";
+import { getArtist, getArtistTracks } from "../services/jamendo";
 
 export default function Artist() {
   const { id } = useParams();
-  const [artista, setArtista] = useState(null);
-  const [releases, setReleases] = useState([]);
+  const { setMusicList, setTrack, currentTrack, isPlaying } = usePlayerStore();
+  const { data, loading, error } = useFetch(
+    () => Promise.all([getArtist(id), getArtistTracks(id)]),
+    [id]
+  );
 
-  useEffect(() => {
-    axios
-      .get(`https://musicbrainz.org/ws/2/artist?query=artist:${id}&fmt=json`)
-      .then((response) => {
-        setArtista(response.data.artists[0]);
-        // 2. Buscar releases del artista
-        return axios.get(
-          `https://musicbrainz.org/ws/2/release?artist=${response.data.artists[0].id}&fmt=json`
-        );
-      })
-      .then((response) => {
-        setReleases(response.data.releases);
-      })
-      .catch(console.error);
-  }, [id]);
+  if (loading) return <p className="p-5">Cargando artista...</p>;
+  if (error) return <p className="p-5 text-danger">No se pudo cargar el artista: {error.message}</p>;
 
-  const firstRelease = releases[0];
+  const [artist, tracks] = data;
+  if (!artist) return <p className="p-5">Artista no encontrado.</p>;
+
+  const play = (index) => {
+    setMusicList(tracks);
+    setTrack(tracks[index]);
+  };
 
   return (
     <div className="container-fluid">
-      {!artista ? (
-        <p>Cargando artista...</p>
-      ) : (
-        <div className="row p-5">
-          {firstRelease ? (
-            <div className="col-md-4">
-              <img
-                src={`https://coverartarchive.org/release/${firstRelease.id}/front`}
-                alt={firstRelease.title}
-                style={{ width: 400, height: 400, objectFit: "cover" }}
-                onError={(e) => (e.target.style.display = "none")}
-              />
-            </div>
-          ) : (
-            <p></p>
-          )}
-
-          <div className="col-md-5">
-            <h2>{artista.name}</h2>
-
-            <p> Fecha de creacion de banda: {artista["life-span"].begin} </p>
-
-            <p>
-              {" "}
-              {artista.area.name}, {artista["begin-area"].name}{" "}
-            </p>
-
-            <p> Generos: {artista.tags.map((tag) => tag.name)}</p>
-          </div>
+      <div className="row p-5">
+        <div className="col-md-4 mb-4">
+          <img
+            src={artist.image}
+            alt={artist.name}
+            className="img-fluid rounded"
+            style={{ width: 300, height: 300, objectFit: "cover" }}
+          />
         </div>
-      )}
+        <div className="col-md-8">
+          <h2>{artist.name}</h2>
+          {artist.shareUrl && (
+            <p>
+              <a href={artist.shareUrl} target="_blank" rel="noreferrer">
+                Ver en Jamendo
+              </a>
+            </p>
+          )}
+          <h5 className="mt-4">Canciones populares</h5>
+          {tracks.length === 0 && <p>Este artista no tiene canciones disponibles.</p>}
+          <ul className="list-group">
+            {tracks.map((track, i) => {
+              const active = currentTrack === track.src && isPlaying;
+              return (
+                <li key={track.id} className="list-group-item d-flex align-items-center gap-3">
+                  <button
+                    className="btn btn-primary btn-sm"
+                    onClick={() => play(i)}
+                    disabled={active}
+                    aria-label={`Reproducir ${track.title}`}
+                  >
+                    {active ? "⏸" : "▶"}
+                  </button>
+                  <img src={track.cover} alt="" width={40} height={40} style={{ objectFit: "cover" }} />
+                  <span className="flex-grow-1 text-truncate">{track.title}</span>
+                  <span className="text-muted small">{formatTime(track.duration)}</span>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </div>
     </div>
   );
 }

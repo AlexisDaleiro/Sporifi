@@ -1,50 +1,7 @@
 import { create } from "zustand";
 
 const usePlayerStore = create((set, get) => ({
-  musicList: [
-    {
-      src: "/src/assets/Charlie Puth - How Long.mp3",
-      title: "How Long",
-      artist: "Charlie Puth",
-      cover: "/src/assets/charlieputh.jpg",
-    },
-    {
-      src: "/src/assets/Barns Courtney - Mother Teresa.flac",
-      title: "Mother Teresa",
-      artist: "Barns Courtney",
-      cover: "/src/assets/barns-courtney.jpg",
-    },
-    {
-      src: "/src/assets/Linkin Park - CASTLE OF GLASS.flac",
-      title: "Castle of Glass",
-      artist: "Linkin Park",
-      cover: "/src/assets/linkinpark.jpg",
-    },
-    {
-      src: "/src/assets/The Heavy - How You Like Me Now.mp3",
-      title: "How You Like Me Now",
-      artist: "The Heavy",
-      cover: "/src/assets/theheavy.jpg",
-    },
-    {
-      src: "Thirty Seconds to Mars",
-      title: "Thirty Seconds to Mars",
-      artist: "The Killers",
-      cover: "/src/assets/thekillers.jpg",
-    },
-    {
-      src: "Oh The Larceny - Can t Stop Me Now.flac",
-      title: "Can't Stop Me Now",
-      artist: "Oh The Larceny",
-      cover: "/src/assets/onthelarceny.webp",
-    },
-    {
-      src: "Innerpartysystem - Don't Stop (Album Version Explicit)",
-      title: "Don't Stop",
-      artist: "Innerpartysystem",
-      cover: "/src/assets/innerpartysystem.jpg",
-    },
-  ],
+  musicList: [], // se carga desde Jamendo (ver setMusicList)
 
   currentTrack: null, // No hay canción seleccionada inicialmente
   currentTrackIndex: -1, // Índice de la canción actual (-1 significa ninguna)
@@ -56,9 +13,11 @@ const usePlayerStore = create((set, get) => ({
     cover: "/default-cover.svg",
   }, // 🔧 Info inicial
 
+  setMusicList: (musicList) => set({ musicList }),
+
   setTrack: (track) => {
     const state = get();
-    const trackIndex = state.musicList.findIndex((t) => t.src === track.src);
+    const trackIndex = state.musicList.findIndex((t) => t.id === track.id);
 
     set({
       currentTrack: track.src,
@@ -66,7 +25,7 @@ const usePlayerStore = create((set, get) => ({
       isPlaying: true,
       trackInfo: {
         title: track.title,
-        artist: track.artist,
+        artist: track.artistName,
         cover: track.cover,
       },
     });
