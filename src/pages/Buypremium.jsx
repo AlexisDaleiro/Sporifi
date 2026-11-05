@@ -17,7 +17,7 @@ export default function Buypremium() {
             <h2>Exprime al maximo tu musica, con premium individual</h2>
             <p>
               Disfruta de la mejor musica, sin anuncios, sin publicidad, con
-              Sporify premium. Desde solo 7,99 US$. Cancela cuando quieras
+              Sporifi premium. Desde solo 7,99 US$. Cancela cuando quieras
             </p>
             <div className="d-flex justify-content-center">
               <div className="row my-4 ">
@@ -139,7 +139,7 @@ export default function Buypremium() {
                         1 cuenta. 7,99 US$ al mes o 79,99 US$ al año. Cancela
                         cuando quieras. El plan individual es perfecto para
                         quienes quieren escuchar musica sin anuncios, sin
-                        publicidad, con Sporify Premium{" "}
+                        publicidad, con Sporifi Premium{" "}
                       </p>
                       <button className="btn btn-light">
                         Pasar a premium individual
@@ -155,7 +155,7 @@ export default function Buypremium() {
                         1 cuenta. 7,99 US$ al mes o 79,99 US$ al año. Cancela
                         cuando quieras. El plan individual es perfecto para
                         quienes quieren escuchar musica sin anuncios, sin
-                        publicidad, con Sporify Premium{" "}
+                        publicidad, con Sporifi Premium{" "}
                       </p>
                       <button className="btn btn-light">
                         Pasar a premium duo
@@ -171,7 +171,7 @@ export default function Buypremium() {
                         1 cuenta. 7,99 US$ al mes o 79,99 US$ al año. Cancela
                         cuando quieras. El plan individual es perfecto para
                         quienes quieren escuchar musica sin anuncios, sin
-                        publicidad, con Sporify Premium{" "}
+                        publicidad, con Sporifi Premium{" "}
                       </p>
                       <button className="btn btn-light">
                         Pasar a premium familiar

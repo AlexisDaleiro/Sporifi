@@ -20,7 +20,7 @@ export default function Artist() {
       .then((response) => {
         setReleases(response.data.releases);
       })
-      .finally(() => setLoading(false));
+      .catch(console.error);
   }, [id]);
 
   const firstRelease = releases[0];

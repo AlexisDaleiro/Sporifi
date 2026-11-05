@@ -1,6 +1,5 @@
-import { React, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import Buypremium from "../pages/Buypremium";
 
 export default function Navbar() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -33,8 +32,8 @@ export default function Navbar() {
                     <img
                       className="img-fluid"
                       style={{ width: "60px" }}
-                      src="./src/assets/icons8-spotify.svg"
-                      alt="Your Company"
+                      src="/logo.svg"
+                      alt="Sporifi"
                     />
                   </Link>
                 </div>

@@ -1,12 +1,28 @@
-# React + Vite
+# Sporifi
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Reproductor de música web hecho con React. Proyecto personal en desarrollo: el catálogo va a venir de la API de [Jamendo](https://developer.jamendo.com/v3.0/docs) (música Creative Commons).
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+React 19 · Vite · React Router · Zustand · Bootstrap / react-bootstrap
 
-## Expanding the ESLint configuration
+## Correr el proyecto
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+npm ci
+npm run dev
+```
+
+Otros scripts: `npm run lint`, `npm run build`, `npm run preview`.
+
+### Variables de entorno
+
+Copiar `.env.example` a `.env.local` y completar `VITE_JAMENDO_CLIENT_ID` con el `client_id` gratuito de Jamendo. *(Se usa a partir de la Fase 2 del plan.)*
+
+## Estado
+
+Ver [PLAN.md](PLAN.md) para el diagnóstico y las fases pendientes.
+
+## Créditos
+
+Música vía [Jamendo](https://www.jamendo.com), cada canción bajo la licencia Creative Commons indicada por su artista.

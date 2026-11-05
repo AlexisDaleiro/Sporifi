@@ -141,7 +141,6 @@ export default function Home() {
                 className="card-img-top"
                 alt={`${track.title} cover`}
                 style={{ height: "200px", objectFit: "cover" }}
-                onError={(e) => {}}
               />
               <div className="card-body d-flex flex-column">
                 <h5 className="card-title text-truncate">{track.title}</h5>
@@ -171,20 +170,6 @@ export default function Home() {
         ))}
       </div>
 
-      <style>{`
-        .hover-shadow:hover {
-          transform: translateY(-2px);
-          transition: transform 0.2s ease-in-out;
-        }
-        
-        .card {
-          transition: all 0.2s ease-in-out;
-        }
-        
-        .card:hover {
-          box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
-        }
-      `}</style>
     </div>
   );
 }

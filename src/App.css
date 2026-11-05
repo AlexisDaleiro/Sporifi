@@ -147,8 +147,8 @@
   color: gray;
 }
 
-/* Estilos para las tarjetas de planes de Spotify */
-.spotify-plan-card {
+/* Estilos para las tarjetas de planes */
+.plan-card {
   background-color: white;
   border-radius: 10px;
   padding: 24px;
@@ -160,7 +160,7 @@
   margin: 0 auto;
 }
 
-.spotify-plan-card:hover {
+.plan-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
@@ -265,3 +265,37 @@
   line-height: 1.4;
   margin-bottom: 0;
 }
+
+/* Movido desde estilos inline de Player y Home */
+@media (max-width: 576px) {
+  .player-container {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 8px 4px;
+  }
+  .player-container > div {
+    margin-bottom: 6px;
+  }
+}
+
+.form-range::-webkit-slider-thumb {
+  background-color: #0d6efd;
+}
+
+.form-range::-moz-range-thumb {
+  background-color: #0d6efd;
+}
+
+.hover-shadow:hover {
+  transform: translateY(-2px);
+  transition: transform 0.2s ease-in-out;
+}
+
+.card {
+  transition: all 0.2s ease-in-out;
+}
+
+.card:hover {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+

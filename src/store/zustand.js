@@ -53,7 +53,7 @@ const usePlayerStore = create((set, get) => ({
   trackInfo: {
     title: "Elige una cancion para reproducir",
     artist: "",
-    cover: "/src/assets/negrofortnite.webp",
+    cover: "/default-cover.svg",
   }, // 🔧 Info inicial
 
   setTrack: (track) => {

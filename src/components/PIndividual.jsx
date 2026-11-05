@@ -17,7 +17,7 @@ export default function PIndividual({
 }) {
   return (
     <div
-      className="spotify-plan-card"
+      className="plan-card"
       style={{
         borderColor: isPopular ? accentColor : "#ddd",
       }}

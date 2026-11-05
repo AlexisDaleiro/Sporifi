@@ -233,27 +233,6 @@ export default function Player() {
         </button>
       </div>
 
-      {/* Estilos responsivos */}
-      <style>{`
-        @media (max-width: 576px) {
-          .player-container {
-            flex-direction: column;
-            align-items: stretch;
-            padding: 8px 4px;
-          }
-          .player-container > div {
-            margin-bottom: 6px;
-          }
-        }
-        
-        .form-range::-webkit-slider-thumb {
-          background-color: #0d6efd;
-        }
-        
-        .form-range::-moz-range-thumb {
-          background-color: #0d6efd;
-        }
-      `}</style>
     </div>
   );
 }

@@ -22,3 +22,12 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Audio (Sporifi usa Jamendo; nunca versionar música)
+*.flac
+*.mp3
+*.wav
+*.ogg
+
+# Herramientas locales
+.unlighthouse

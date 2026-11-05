@@ -11,7 +11,6 @@ import MainLayout from "./pages/MainLayout.jsx";
 import EmptyLayout from "./pages/EmptyLayout.jsx";
 import InstallApp from "./pages/InstallApp.jsx";
 
-import { useState } from "react";
 
 function App() {
   return (
