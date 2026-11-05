@@ -74,22 +74,46 @@ export async function requestNonEmpty(path, params, clientId, attempts = 5) {
 
 const toTracks = (results, d) => results.map((t) => normalizeTrack(t, d));
 
-export async function getPopularTracks({ limit = 20, offset = 0, order = "popularity_week" } = {}) {
-  return toTracks(await requestNonEmpty("tracks", { ...TRACK_PARAMS, order, limit, offset }));
+// `tag` filtra por género (fuzzytags de Jamendo: rock, pop, electronic, hiphop, jazz...).
+export async function getPopularTracks({ limit = 20, offset = 0, order = "popularity_week", tag } = {}) {
+  const params = { ...TRACK_PARAMS, order, limit, offset, ...(tag && { fuzzytags: tag }) };
+  return toTracks(await requestNonEmpty("tracks", params));
 }
 
 export async function searchTracks(query, { limit = 20, offset = 0 } = {}) {
   return toTracks(await requestNonEmpty("tracks", { ...TRACK_PARAMS, search: query, limit, offset }));
 }
 
-export async function getTrack(id) {
-  const [t] = await requestNonEmpty("tracks", { ...TRACK_PARAMS, id });
-  return t ? normalizeTrack(t) : null;
+export async function getArtist(id) {
+  const [a] = await request("artists", { id });
+  return a ? normalizeArtist(a) : null;
 }
 
-export async function getArtist(id) {
-  const [a] = await request("artists", { id, imagesize: 300 });
-  return a ? normalizeArtist(a) : null;
+export async function searchArtists(query, { limit = 12 } = {}) {
+  const results = await request("artists", { namesearch: query, order: "popularity_total", limit });
+  return results.map(normalizeArtist);
+}
+
+export async function getPopularArtists({ limit = 12 } = {}) {
+  const results = await request("artists", { order: "popularity_week", limit });
+  return results.map(normalizeArtist);
+}
+
+export async function searchAlbums(query, { limit = 12 } = {}) {
+  const results = await request("albums", { namesearch: query, order: "popularity_total", limit, imagesize: 300 });
+  return results.map(normalizeAlbum);
+}
+
+export async function getPopularAlbums({ limit = 12 } = {}) {
+  const results = await request("albums", { order: "popularity_week", limit, imagesize: 300 });
+  return results.map(normalizeAlbum);
+}
+
+export async function getArtistAlbums(artistId, { limit = 20 } = {}) {
+  const results = await request("albums", {
+    artist_id: artistId, order: "releasedate_desc", limit, imagesize: 300,
+  });
+  return results.map(normalizeAlbum);
 }
 
 // No usar artists/tracks: devuelve todo el catálogo por id (hasta 350 KB) e ignora limit/order.
@@ -106,11 +130,4 @@ export async function getAlbum(id) {
   const album = normalizeAlbum(a);
   const tracks = [...(a.tracks || [])].sort((x, y) => Number(x.position) - Number(y.position));
   return { ...album, tracks: toTracks(tracks, album) };
-}
-
-// No se expone `user_name`: en playlists públicas suele ser el email del autor.
-export async function getPlaylist(id) {
-  const [p] = await request("playlists/tracks", { id, imagesize: 300 });
-  if (!p) return null;
-  return { id: String(p.id), name: p.name, tracks: toTracks(p.tracks || []) };
 }

@@ -1,181 +1,103 @@
-import usePlayerStore, { selectCurrentTrack } from "../store/zustand";
-import { Link } from "react-router-dom";
+import { useState } from "react";
 import useFetch from "../hooks/useFetch";
-import { getPopularTracks } from "../services/jamendo";
+import usePlayback from "../hooks/usePlayback";
+import useLibraryStore from "../store/library";
+import { getPopularAlbums, getPopularArtists, getPopularTracks } from "../services/jamendo";
+import Async from "../components/Async";
+import SongCard from "../components/SongCard";
+import { AlbumCard, ArtistCard } from "../components/MediaCards";
+
+// [etiqueta, tag de Jamendo]
+const GENRES = [
+  ["Todo", undefined],
+  ["Rock", "rock"],
+  ["Pop", "pop"],
+  ["Electrónica", "electronic"],
+  ["Hip hop", "hiphop"],
+  ["Jazz", "jazz"],
+  ["Ambient", "ambient"],
+  ["Clásica", "classical"],
+];
+const RECENT_SHOWN = 6;
+
+function SongGrid({ tracks, playback }) {
+  return (
+    <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4">
+      {tracks.map((track, index) => (
+        <div key={track.id} className="col">
+          <SongCard track={track} active={playback.isActive(track)} onPlay={() => playback.toggle(index)} />
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export default function Home() {
-  const { playQueue, togglePlay, isPlaying } = usePlayerStore();
-  const current = usePlayerStore(selectCurrentTrack);
-  const { data: tracks, loading, error } = useFetch(() => getPopularTracks({ limit: 20 }), []);
-
-  // La cola del player pasa a ser la lista visible; si ya es la actual, alterna play/pausa.
-  const handlePlay = (track, index) => {
-    if (current?.id === track.id) togglePlay();
-    else playQueue(tracks, index);
-  };
+  const [tag, setTag] = useState(undefined);
+  const recent = useLibraryStore((s) => s.recent);
+  const popular = useFetch(() => getPopularTracks({ limit: 12, tag }), [tag]);
+  const artists = useFetch(() => getPopularArtists({ limit: 12 }), []);
+  const albums = useFetch(() => getPopularAlbums({ limit: 12 }), []);
+  const recentPlayback = usePlayback(recent);
+  const popularPlayback = usePlayback(popular.data ?? []);
 
   return (
-    <div className="container p-5 py-4">
-      <div className="row">
-        <div className="mb-3">
-          <span>
-            <button className="btn btn-secondary shadow-lg me-2 rounded-5">
-              Todo
-            </button>
-          </span>
-          <span>
-            <button className="btn btn-secondary shadow-lg me-2 rounded-5">
-              Musica
-            </button>
-          </span>
-          <span>
-            <button className="btn btn-secondary shadow-lg me-2 rounded-5">
-              Podcast
-            </button>
-          </span>
-        </div>
-      </div>
-      <div className="row">
-        <div className="col-md-3">
-          <div className="card mb-3" style={{ cursor: "pointer" }}>
-            <div className="row g-0">
-              <div className="col-md-4">
-                <img
-                  src="https://picsum.photos/200/300"
-                  className="img-fluid rounded-start"
-                  alt="..."
-                  style={{
-                    maxHeight: "65px",
-                    objectFit: "cover",
-                    width: "80px",
-                  }}
-                />
-              </div>
-              <div className="col-md-8">
-                <div className="card-body">
-                  <h5 className="card-title">Mix Diario 1</h5>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-3">
-          <div className="card mb-3" style={{ cursor: "pointer" }}>
-            <div className="row g-0">
-              <div className="col-md-4">
-                <img
-                  src="https://picsum.photos/200/300"
-                  className="img-fluid rounded-start"
-                  alt="..."
-                  style={{
-                    maxHeight: "65px",
-                    objectFit: "cover",
-                    width: "80px",
-                  }}
-                />
-              </div>
-              <div className="col-md-8">
-                <div className="card-body">
-                  <h5 className="card-title">Mix Diario 2</h5>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-3">
-          <div className="card mb-3" style={{ cursor: "pointer" }}>
-            <div className="row g-0">
-              <div className="col-md-4">
-                <img
-                  src="https://picsum.photos/200/300"
-                  className="img-fluid rounded-start"
-                  alt="..."
-                  style={{
-                    maxHeight: "65px",
-                    objectFit: "cover",
-                    width: "80px",
-                  }}
-                />
-              </div>
-              <div className="col-md-8">
-                <div className="card-body">
-                  <h5 className="card-title">Mix Diario 3</h5>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-3">
-          <div className="card mb-3" style={{ cursor: "pointer" }}>
-            <div className="row g-0">
-              <div className="col-md-4">
-                <img
-                  src="https://picsum.photos/200/300"
-                  className="img-fluid rounded-start"
-                  alt="..."
-                  style={{
-                    maxHeight: "65px",
-                    objectFit: "cover",
-                    width: "80px",
-                  }}
-                />
-              </div>
-              <div className="col-md-8">
-                <div className="card-body ">
-                  <h5 className="card-title ">Mix Diario 4</h5>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="container-fluid p-4 p-md-5">
+      {recent.length > 0 && (
+        <section className="mb-5">
+          <h4 className="mb-3">Escuchado recientemente</h4>
+          <SongGrid tracks={recent.slice(0, RECENT_SHOWN)} playback={recentPlayback} />
+        </section>
+      )}
 
-      <div className="row">
-        <div className="col-12">
-          <h4 className="text-start mt-3 "> Hecho para ti</h4>
-          <p className="text-start mb-5 ">Usuario</p>
+      <section className="mb-5">
+        <h4 className="mb-3">Canciones populares</h4>
+        <div className="d-flex flex-wrap gap-2 mb-3" role="group" aria-label="Género">
+          {GENRES.map(([label, value]) => (
+            <button
+              key={label}
+              className={`btn btn-sm rounded-pill ${tag === value ? "btn-primary" : "btn-secondary"}`}
+              aria-pressed={tag === value}
+              onClick={() => setTag(value)}
+            >
+              {label}
+            </button>
+          ))}
         </div>
-      </div>
-      {loading && <p>Cargando canciones...</p>}
-      {error && <p className="text-danger">No se pudieron cargar las canciones: {error.message}</p>}
+        <Async loading={popular.loading} error={popular.error}>
+          {popular.data?.length ? (
+            <SongGrid tracks={popular.data} playback={popularPlayback} />
+          ) : (
+            <p className="text-muted">No hay canciones para este género.</p>
+          )}
+        </Async>
+      </section>
 
-      <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
-        {(tracks ?? []).map((track, index) => (
-          <div key={track.id} className="col">
-            <div className="card h-100 shadow-sm hover-shadow">
-              <img
-                src={track.cover}
-                className="card-img-top"
-                alt={`${track.title} cover`}
-                style={{ height: "200px", objectFit: "cover" }}
-              />
-              <div className="card-body d-flex flex-column">
-                <h5 className="card-title text-truncate">{track.title}</h5>
-                <Link to={`/artist/${track.artistId}`}>
-                  <p className="card-text text-muted">{track.artistName}</p>
-                </Link>
-                <button
-                  className="btn btn-primary mt-auto"
-                  onClick={() => handlePlay(track, index)}
-                >
-                  {current?.id === track.id && isPlaying ? (
-                    <>
-                      <span className="me-2">⏸</span>
-                      Pausar
-                    </>
-                  ) : (
-                    <>
-                      <span className="me-2">▶</span>
-                      Reproducir
-                    </>
-                  )}
-                </button>
+      <section className="mb-5">
+        <h4 className="mb-3">Artistas populares</h4>
+        <Async loading={artists.loading} error={artists.error}>
+          <div className="row row-cols-2 row-cols-md-4 row-cols-xl-6 g-3">
+            {artists.data?.map((artist) => (
+              <div key={artist.id} className="col">
+                <ArtistCard artist={artist} />
               </div>
-            </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </Async>
+      </section>
 
+      <section className="mb-5">
+        <h4 className="mb-3">Álbumes populares</h4>
+        <Async loading={albums.loading} error={albums.error}>
+          <div className="row row-cols-2 row-cols-md-4 row-cols-xl-6 g-3">
+            {albums.data?.map((album) => (
+              <div key={album.id} className="col">
+                <AlbumCard album={album} />
+              </div>
+            ))}
+          </div>
+        </Async>
+      </section>
     </div>
   );
 }

@@ -309,3 +309,13 @@
 .sidebar-credit a {
   color: #fff;
 }
+
+.sidebar-link .text-truncate {
+  min-width: 0;
+}
+.sidebar-playlists {
+  margin-top: 1.5rem;
+  gap: 0.25rem;
+  overflow-y: auto;
+  max-height: 30vh;
+}

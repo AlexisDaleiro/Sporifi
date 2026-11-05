@@ -21,7 +21,19 @@ Revisión hecha el 2026-11-04 sobre `main` (último commit `638c41c`, 2025-08-01
   - Verificado: next/prev, seek, mute, volumen, repeat (incluido `loop`), shuffle, fin de canción, canción rota (salta en ~1 s con aviso), recarga (restaura pausado y reproduce al dar play), Home y Artist usando la cola.
   - Hallazgo: Jamendo no valida el token `from=` de las URLs de audio (se reprodujo con un token inválido), así que no se renuevan URLs. Si algún día caducan, se resuelve con `getTrack` al fallar.
   - Pendiente menor: no hay vista de la cola ni arrastrar para reordenar (no estaba en el plan).
-- **Fase 4 en adelante:** sin empezar.
+- **Fase 4 — hecha y verificada en el navegador** (2026-11-05): 
+  - **Navbar:** búsqueda real con debounce (350 ms) a `/search?q=`, menú móvil con los enlaces reales; se quitaron notificaciones y perfil falsos.
+  - **Sidebar:** `NavLink` con estado activo, lista de playlists propias, crear playlist, favoritos.
+  - **Home:** recientes (historial persistido), canciones populares con chips de género (rock, pop, electrónica, hip hop, jazz, ambient, clásica), artistas y álbumes populares; `SongCard` reutilizable.
+  - **Search:** canciones, artistas y álbumes, con estados de carga, error y vacío.
+  - **Artist:** canciones populares reproducibles y álbumes. **Album** (nuevo): lista, duración total, reproducir todo.
+  - **Biblioteca** (nuevo, `/library`), **Favoritos** (`/favorites`) y **Playlists propias** (`/playlist/:id`: crear, renombrar, eliminar, agregar/quitar canciones) en localStorage vía `persist` (`src/store/library.js`).
+  - **Premium:** planes como datos (`src/data/plans.js`), precios consistentes, aviso de demo (sin cobros), modal de plantilla fuera. **Condiciones** e **Instalar app** con contenido real. **404** dentro del layout y en español.
+  - 25 tests (`npm test`): cola, store de biblioteca, formato de tiempo, capa Jamendo.
+  - **Decisiones:** las playlists son locales (las públicas de Jamendo no se usan: `getPlaylist` y `getTrack` se borraron del servicio). `Condiciones` pasó al layout principal porque con un layout sin player la música se cortaba al entrar (`EmptyLayout` eliminado). Instalar app explica cómo crear un acceso directo; no hay PWA.
+  - Se borraron `PIndividual.jsx` y `tarjetas.png` (imagen de tarjetas de pago).
+  - Pendiente de la Fase 5: en pantallas chicas el sidebar sigue ocupando espacio y el tema oscuro/claro está mezclado.
+- **Fase 5 en adelante:** sin empezar.
 
 *La sección 1 de abajo es el diagnóstico original, antes de las Fases 0 y 1.*
 

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import usePlayerStore, { selectCurrentTrack } from "../store/zustand";
+import useLibraryStore from "../store/library";
 import { nextPos } from "../store/queue";
 import formatTime from "../utils/formatTime";
 
@@ -202,6 +203,7 @@ export default function Player() {
           setStatus("ready");
           setMessage(null);
           failures.current = 0;
+          if (track) useLibraryStore.getState().addRecent(track);
         }}
         onPause={handlePause}
         onEnded={handleEnded}
